@@ -130,13 +130,13 @@ category: "reading notes"
 
   ```
 
- - 在单例反序列化时，解决反序列化得到的对象是一个新对象，而不是原来的实例的问题：
-  ```
+- 在单例反序列化时，解决反序列化得到的对象是一个新对象，而不是原来的实例的问题：
+ ```java
   	protected Object readResolve() throws ObjectStreamException {
   		System.out.println("调用了readResolve方法！");
   		return MyObjectHandler.myObject;
   	}
-  ```
+ ```
 
-  # 第七章 拾遗增补
-  - 线程组，一级关联：父对象中有子对象，但并不创建子孙对象。多级关联：父对象中有子对象，子对象中再创建子对象，也就出现子孙对象的效果。
+# 第七章 拾遗增补
+- 线程组，一级关联：父对象中有子对象，但并不创建子孙对象。多级关联：父对象中有子对象，子对象中再创建子对象，也就出现子孙对象的效果。

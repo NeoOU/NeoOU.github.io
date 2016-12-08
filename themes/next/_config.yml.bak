@@ -6,7 +6,7 @@
 favicon: /favicon.ico
 
 # Set default keywords (Use a comma to separate)
-keywords: "Hexo, NexT"
+keywords: "oomed, java"
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
@@ -241,7 +241,7 @@ custom_logo:
 # Available value:
 #    normal | night | night eighties | night blue | night bright
 # https://github.com/chriskempson/tomorrow-theme
-highlight_theme: normal
+highlight_theme: night blue
 
 
 # ---------------------------------------------------------------
