@@ -1,6 +1,8 @@
 ---
 title: Head First Design Patterns
 category: "reading notes"
+date: 2016/12/10
+update: 2016/12/19
 ---
 
 
@@ -8,10 +10,8 @@ category: "reading notes"
 书名：Head First Design Patterns
 作者： Eric Freeman and Elisabeth
 
-第一次阅读周期（中文版）：2016-10-1 至 现在
-代码地址：
-
-**笔记中若有错误之处，欢迎批评指正、解疑释惑。**
+第一次阅读周期（中文版）：2016-12-10 至 现在
+代码地址：[HeadFirstDesignPatterns](https://github.com/oomeD/ReadingNotes/tree/master/HeadFirstDesignPatterns)
 
 <!--more-->
 

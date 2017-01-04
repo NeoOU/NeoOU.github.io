@@ -130,7 +130,7 @@ font:
 social:
   #LinkLabel: Link
   GitHub: https://github.com/oomeD
-  Weibo: http://weibo.com/u/2586909140
+  Weibo: http://weibo.com/oomeD
 
 
 # Social Links Icons
@@ -332,7 +332,7 @@ facebook_comments_plugin:
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: true
+  enable: false
   app_id: bAJ5WwQT7MTIam9z76GGNCUY-gzGzoHsz
   app_key: gH4DKxip95FScR13iGbcIhEh
 

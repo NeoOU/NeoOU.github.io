@@ -1,6 +1,7 @@
 ---
 title: CentOS搭建SVN服务器
 category: "tool"
+date: 2016/11/20
 ---
 
 ```

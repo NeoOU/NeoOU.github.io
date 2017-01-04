@@ -1,6 +1,8 @@
 ---
 title: Java Multi-thread Programming
 category: "reading notes"
+date: 2016/10/16
+update: 2016/10/31
 ---
 
 # 写在前面
@@ -8,9 +10,7 @@ category: "reading notes"
 作者：高洪岩
 
 第一次阅读周期：2016-10-16 至 2016-10-31
-代码地址：
-
-**笔记中若有错误之处，欢迎批评指正、解疑释惑。**
+代码地址：[JavaMulti-threadProgramming](https://github.com/oomeD/ReadingNotes/tree/master/JavaMulti-threadProgramming)
 
 <!--more-->
 
