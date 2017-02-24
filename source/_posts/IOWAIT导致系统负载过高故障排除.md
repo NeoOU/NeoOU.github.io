@@ -33,6 +33,6 @@ yum install iotop
 加1G内存<br>
 ![loadAverage0223](/images/IOWAIT/loadAverage0223.png)
 
-# 参考文章
+# 4.参考文章
 - [Troubleshooting High I/O Wait in Linux](http://bencane.com/2012/08/06/troubleshooting-high-io-wait-in-linux/)
 - [quan：Exadata计算节点由kswapd0进程引起的IO使用率100%，内存不足的故障处理](http://blog.itpub.net/22878696/viewspace-1805953/)

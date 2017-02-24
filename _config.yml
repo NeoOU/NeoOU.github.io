@@ -66,10 +66,10 @@ pagination_dir: page
 theme: next
 
 # Deployment
-## Docs: https://hexo.io/docs/deployment.html
+## Docs: https://hexo.io/docs/deployment.html git@coding.net:oomed/oomed.coding.me.git
 deploy:
   type: git
-  repository: git@github.com:oomeD/oomed.github.io.git
+  repository: https://git.coding.net/oomed/oomed.coding.me.git
   branch: master
 
 # headimg
