@@ -7,33 +7,81 @@ date: 2017/03/13
 ---
 
 # 1. Threadlocal源码
-## 1.1 几个基本点
-- Thread、Threadlocal、ThreadlocalMap三者的关系就好比老板（Thread）、助理（Threadlocal）、老板公文包（ThreadlocalMap），公文包由助理管理，但并不由助理保管。ThreadlocalMap的引用由Thread持有，Threadlocal并不是ThreadlocalMap的所有者，只是对ThreadlocalMap代为管理。
+## 1.1 老板、助理与公文包
+- Thread、Threadlocal、ThreadlocalMap三者的关系就好比老板（Thread）、助理（Threadlocal）、老板的公文包（ThreadlocalMap）。公文包由助理管理，但并不由助理保管，并且老板只有一个公文包。ThreadlocalMap的引用由Thread持有，Threadlocal并不是ThreadlocalMap的所有者，只是对ThreadlocalMap代为管理。
  ```java
  public class Thread implements Runnable {
+    //公文包是老板的，而且如果有，就只有一个。
     ThreadLocal.ThreadLocalMap threadLocals = null;
  }
  ```
- ```java
- public class ThreadLocal<T> {
-     void createMap(Thread t, T firstValue) {
-       t.threadLocals = new ThreadLocalMap(this, firstValue);
+
+- 助理（Threadlocal）只能往公文包（ThreadlocaMap）里放一个文件夹（ThreadlocalMap.Entry），并用自己的身份做标识，而替老板管理的文件（Entry.value）就放在这个文件夹中了。
+   ```java
+   static class ThreadLocalMap {
+     //文件夹在公文包中
+     static class Entry extends WeakReference<ThreadLocal<?>> {
+         Object value;//替老板管理的文件，可以是一份文件，也可以是一摞文件。对文件的操作老板有个要求，要么是全部替换，要么是全部拿出
+
+         Entry(ThreadLocal<?> k, Object v) {//用助理身份标识了的文件夹
+             super(k);
+             value = v;
+         }
      }
- }
- ```
-- 助理（Threadlocal）每次用公文包（ThreadlocalMap）都要从老板（Thread）那里取。当然，如果老板还没有公文包，那就给老板买个新的。Threadlocal所有导出api（包括set,get,remove方法）的第一步操作都是通过getMap(Thread t)方法从Thread获取ThreadlocalMap。如果没有就new出一个。
+   }
+   ```
+
+- 助理（Threadlocal）每次用公文包（ThreadlocalMap）都要先找到老板（Thread），再从老板那里取。当然，如果在要存文件的时候老板还没有公文包，那就给老板买个新的。Threadlocal所有导出api（包括set,get,remove方法）都是先获取当前线程对象，再通过对象获取ThreadlocalMap，如果没有就create一个。
  ```java
- public class ThreadLocal<T> {
-     ThreadLocalMap getMap(Thread t) {
-       return t.threadLocals;
-     }
+public class ThreadLocal<T> {
+    void createMap(Thread t, T firstValue) {//给老板买新公文包
+     t.threadLocals = new ThreadLocalMap(this, firstValue);//把件放入用自己身份标识了的文件夹
+    }
+
+    ThreadLocalMap getMap(Thread t) {//找老板要公文包
+      return t.threadLocals;
+    }
+
+    public T get() {
+        Thread t = Thread.currentThread();//找到当前的老板
+        ThreadLocalMap map = getMap(t);//找老板要公文包
+        if (map != null) {
+            ThreadLocalMap.Entry e = map.getEntry(this);//找到用自己身份标识了的文件夹
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;//拿到文件
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
+
+    public void set(T value) {
+        Thread t = Thread.currentThread();//找到当前的老板
+        ThreadLocalMap map = getMap(t);//找老板要公文包
+        if (map != null)
+            map.set(this, value);//把文件放入用自己身份标识了的文件夹
+        else
+            createMap(t, value);//给老板买个公文包并把件放入用自己身份标识了的文件夹
+    }
+
+    public void remove() {
+        ThreadLocalMap m = getMap(Thread.currentThread());//先找到当前的老板再找老板要公文包
+        if (m != null)
+            m.remove(this);//从公文包中把自己的文件夹取出
+    }
  }
  ```
 
+- 老板（Thread）可以有多个助理（Threadlocal），只要拥有助理证（是Thradlocal的实例）而且和老板碰见了（线程调用了有Threadlocal对象引用的方法，碰见了就意味着要调用Threadlocal的set、get或者remove方法）了，就能成为也一定会成为老板的助理或者已经是老板的助理了。所有助理共同管理老板唯一的公文包，但都只能操作自己的文件夹。正因为如此，一切有条不紊地进行着。
+
+- 老板（Thread）不用关心，也不用记住自己有多少个助理（Threadlocal）。如果真想知道，打开公文包（ThreadLocalMap），看看公文包里文件夹(ThreadLocalMap.Entry)的个数，及文件夹上面的信息就可以了。
+
+- 同样地，助理（Threadlocal）也可以为多个老板（Thread）服务,也不用理会自己到底服务了多少老板，只要一与老板碰见，就找老板拿到公文包（ThreadLocalMap），要么拿出文件操作一翻（get），要么替换之前的所有文件(set)，或者干脆把自己的文件夹从公文包里取出(remove)暂时不为这个老板服务（下次碰见这个老板还是要再次把文件夹放进老板的公文包）。
+
 ## 1.2 几个问题
-### 1.2.1 关于创建变量副本
-### 1.2.2 关于变量线程隔离
-### 1.2.3 关于弱引用与内存泄漏
+### 1.2.1 关于创建变量副本与线程隔离
+### 1.2.2 关于弱引用与内存泄漏
 
 # 2. Threadlocal应用
 ## 2.1 应用场景
