@@ -7,80 +7,174 @@ date: 2017/03/13
 ---
 
 # 1. Threadlocal源码
-## 1.1 老板、助理与公文包
-- Thread、Threadlocal、ThreadlocalMap三者的关系就好比老板（Thread）、助理（Threadlocal）、老板的公文包（ThreadlocalMap）。公文包由助理管理，但并不由助理保管，并且老板只有一个公文包。ThreadlocalMap的引用由Thread持有，Threadlocal并不是ThreadlocalMap的所有者，只是对ThreadlocalMap代为管理。
- ```java
- public class Thread implements Runnable {
-    //公文包是老板的，而且如果有，就只有一个。
-    ThreadLocal.ThreadLocalMap threadLocals = null;
- }
- ```
+## 1.1 几个基本点
+- Thread、Threadlocal、ThreadlocalMap、ThreadlocalMap.Entry的关系就好比老板（Thread）、助理（Threadlocal）、老板的公文包（ThreadlocalMap）、公文包里的文件夹（ThreadlocalMap.Entry）。
+- 公文包（ThreadlocalMap）是老板（Thread）的，要么没有，要么只有一个。
+  ```java
+  public class Thread implements Runnable {
+     //公文包是老板的，而且如果有，就只有一个，默认没有
+     ThreadLocal.ThreadLocalMap threadLocals = null;
+  }
+  ```
 
-- 助理（Threadlocal）只能往公文包（ThreadlocaMap）里放一个文件夹（ThreadlocalMap.Entry），并用自己的身份做标识，而替老板管理的文件（Entry.value）就放在这个文件夹中了。
-   ```java
-   static class ThreadLocalMap {
-     //文件夹在公文包中
-     static class Entry extends WeakReference<ThreadLocal<?>> {
-         Object value;//替老板管理的文件，可以是一份文件，也可以是一摞文件。对文件的操作老板有个要求，要么是全部替换，要么是全部拿出
+- 老板（Thread）可以有多个助理（Threadlocal），在老板的指挥下，助理们都可以往公文包（ThreadlocalMap）或存或取或移除自己的文件（ThreadlocalMap.Entry.value）。为了便于管理，助理们要把文件放进一个用自己身份标识了的文件夹（ThreadlocalMap.Entry），然后再把文件夹放进公文包。助理只能拿到自己的文件夹，也便只能管理自己文件夹里的文件。当然，助理在或存或取或移除文件之前，都要先判断老板有没有公文包，公文包里有没有用记身份标识了的文件夹。如果没有就要创建新的。
+  ```java
+  //助理
+  public class ThreadLocal<T> {
+    void createMap(Thread t, T firstValue) {//给老板创建新公文包
+        t.threadLocals = new ThreadLocalMap(this, firstValue);
+    }
+    //公文包  
+    static class ThreadLocalMap {
+      //文件夹
+      static class Entry extends WeakReference<ThreadLocal<?>> {
+          //文件
+          Object value;
+          Entry(ThreadLocal<?> k, Object v) {//创建用助理身份标识了的文件夹，并把文件放进去
+              super(k);
+              value = v;
+          }
+      }
+      ThreadLocalMap(ThreadLocal<?> firstKey, Object firstValue) {
+          table = new Entry[INITIAL_CAPACITY];
+          int i = firstKey.threadLocalHashCode & (INITIAL_CAPACITY - 1);
+          table[i] = new Entry(firstKey, firstValue);//给助理自己创建新文件夹
+          size = 1;
+          setThreshold(INITIAL_CAPACITY);
+      }
+    }
+  }
+  ```
 
-         Entry(ThreadLocal<?> k, Object v) {//用助理身份标识了的文件夹
-             super(k);
-             value = v;
-         }
-     }
-   }
-   ```
-
-- 助理（Threadlocal）每次用公文包（ThreadlocalMap）都要先找到老板（Thread），再从老板那里取。当然，如果在要存文件的时候老板还没有公文包，那就给老板买个新的。Threadlocal所有导出api（包括set,get,remove方法）都是先获取当前线程对象，再通过对象获取ThreadlocalMap，如果没有就create一个。
- ```java
+- 老板（Thread）要操作某个文件（ThreadlocalMap.Entry.value）时就把管理这个文件的助理（Threadlocal）召唤到身边，由助理代为操作。助理操作自己放在当前老板公文包里的文件，要做的就是：在老板那拿到公文包（ThreadlocalMap），在公文包里拿到自己的文件夹（ThreadlocalMap.Entry），在文件夹里拿到文件。如果老板想和助理解除关系，那就把标识了该助理身份的文件夹取出来连带文件一起仍了吧。
+```java
 public class ThreadLocal<T> {
-    void createMap(Thread t, T firstValue) {//给老板买新公文包
-     t.threadLocals = new ThreadLocalMap(this, firstValue);//把件放入用自己身份标识了的文件夹
-    }
+   ThreadLocalMap getMap(Thread t) {//找老板要公文包
+     return t.threadLocals;
+   }
 
-    ThreadLocalMap getMap(Thread t) {//找老板要公文包
-      return t.threadLocals;
-    }
+   public T get() {
+       Thread t = Thread.currentThread();//当前老板
+       ThreadLocalMap map = getMap(t);//在老板这要公文包
+       if (map != null) {
+           ThreadLocalMap.Entry e = map.getEntry(this);//找到用自己身份标识了的文件夹
+           if (e != null) {
+               @SuppressWarnings("unchecked")
+               T result = (T)e.value;//拿到文件
+               return result;
+           }
+       }
+       return setInitialValue();
+   }
 
-    public T get() {
-        Thread t = Thread.currentThread();//找到当前的老板
-        ThreadLocalMap map = getMap(t);//找老板要公文包
-        if (map != null) {
-            ThreadLocalMap.Entry e = map.getEntry(this);//找到用自己身份标识了的文件夹
-            if (e != null) {
-                @SuppressWarnings("unchecked")
-                T result = (T)e.value;//拿到文件
-                return result;
+   public void set(T value) {
+       Thread t = Thread.currentThread();//找到当前的老板
+       ThreadLocalMap map = getMap(t);//找老板要公文包
+       if (map != null)
+           map.set(this, value);//把文件放入用自己身份标识了的文件夹
+       else
+           createMap(t, value);//给老板买个公文包并把件放入用自己身份标识了的文件夹
+   }
+
+   public void remove() {
+       ThreadLocalMap m = getMap(Thread.currentThread());//先找到当前的老板再找老板要公文包
+       if (m != null)
+           m.remove(this);//从公文包中把自己的文件夹取出
+   }
+}
+```
+
+- 助理（Threadlocal）对自己管理的文件的存取只能是替换存与整体取。每次存的时候都是整体替换（如果文件夹中已经有文件），取的时候都是先拿到文件夹，再从文件夹中取出全部文件（拿到存储对象的引用）。
+  ```java
+  static class ThreadLocalMap {
+    //存文件
+    private void set(ThreadLocal<?> key, Object value) {
+        Entry[] tab = table;
+        int len = tab.length;
+        int i = key.threadLocalHashCode & (len-1);
+
+        for (Entry e = tab[i];
+             e != null;
+             e = tab[i = nextIndex(i, len)]) {
+            ThreadLocal<?> k = e.get();
+
+            if (k == key) {//已经有用自己身份标识的文件夹
+                e.value = value;//将手头的新文件替换旧文件
+                return;
+            }
+
+            if (k == null) {
+                replaceStaleEntry(key, value, i);
+                return;
             }
         }
-        return setInitialValue();
-    }
 
-    public void set(T value) {
-        Thread t = Thread.currentThread();//找到当前的老板
-        ThreadLocalMap map = getMap(t);//找老板要公文包
-        if (map != null)
-            map.set(this, value);//把文件放入用自己身份标识了的文件夹
+        //如果没有找到用自己身份标识的文件夹，创建一个，并把文件放进去。
+        tab[i] = new Entry(key, value);
+        int sz = ++size;
+        if (!cleanSomeSlots(i, sz) && sz >= threshold)
+            rehash();
+    }
+    //拿出文件夹
+    private Entry getEntry(ThreadLocal<?> key) {
+        int i = key.threadLocalHashCode & (table.length - 1);
+        Entry e = table[i];
+        if (e != null && e.get() == key)
+            return e;
         else
-            createMap(t, value);//给老板买个公文包并把件放入用自己身份标识了的文件夹
+            return getEntryAfterMiss(key, i, e);
     }
+  }
+  ```
 
-    public void remove() {
-        ThreadLocalMap m = getMap(Thread.currentThread());//先找到当前的老板再找老板要公文包
-        if (m != null)
-            m.remove(this);//从公文包中把自己的文件夹取出
-    }
- }
- ```
-
-- 老板（Thread）可以有多个助理（Threadlocal），只要拥有助理证（是Thradlocal的实例）而且和老板碰见了（线程调用了有Threadlocal对象引用的方法，碰见了就意味着要调用Threadlocal的set、get或者remove方法）了，就能成为也一定会成为老板的助理或者已经是老板的助理了。所有助理共同管理老板唯一的公文包，但都只能操作自己的文件夹。正因为如此，一切有条不紊地进行着。
-
-- 老板（Thread）不用关心，也不用记住自己有多少个助理（Threadlocal）。如果真想知道，打开公文包（ThreadLocalMap），看看公文包里文件夹(ThreadLocalMap.Entry)的个数，及文件夹上面的信息就可以了。
-
-- 同样地，助理（Threadlocal）也可以为多个老板（Thread）服务,也不用理会自己到底服务了多少老板，只要一与老板碰见，就找老板拿到公文包（ThreadLocalMap），要么拿出文件操作一翻（get），要么替换之前的所有文件(set)，或者干脆把自己的文件夹从公文包里取出(remove)暂时不为这个老板服务（下次碰见这个老板还是要再次把文件夹放进老板的公文包）。
+- 助理（Threadlocal）也可以为多个老板（Thread）管理文件，只要有老板召唤（线程里有调用Threadlocal对象）。当然，这个时候助理操作的是放在当前这个老板（Thread.currentThread()）的公文包里的当前这个老板的文件，而不可能是其他老板的。
 
 ## 1.2 几个问题
-### 1.2.1 关于创建变量副本与线程隔离
+### 1.2.1 关于变量副本与线程隔离
+- 很多技术博客里都有“变量副本”的说法：
+ > 当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。  ---- [彻底理解ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)
+
+ > ThreadLocal为变量在每个线程中都创建了一个副本。    ---- [Java并发编程：深入剖析ThreadLocal](http://www.cnblogs.com/dolphin0520/p/3920407.html)
+
+ “变量副本”这个词应该来自对Threadlocal类的Java Doc的翻译：
+ > This class provides thread-local variables.  These variables differ from
+ their normal counterparts in that each thread that accesses one (via its
+ {@code get} or {@code set} method) has its own, independently initialized
+ copy of the variable.
+
+ 意译过来大概是这样：<br>
+Threadlocal提供了线程本地变量。这些变量与其他一般变量不同，通过它的get()或set()方法，每个线程就有它自己的，独立初始化了的变量副本。<br>
+- 要厘清“变量副本”是什么，首先要厘清“变量”是什么。Thread的本地变量是指Threadlocal的set方法的参数value？按引用的两篇文章的意思是这样的。而事实不是！线程本地变量（thread-local variable）应该就是指Threadlocal实例。
+ - 这点在Threadlocal类的comments里有说明：
+  > .... each thread that accesses one (via its {@code get} or {@code set} method) has its own，....
+
+   这里的one和its都是指these variables，也就是说变量有get和set方法，对于用于存储的value而言，说Threadlocal有get和set方法才是合理的。
+ - 在comments里的Threadlocal使用示例也有体现：
+   ```java
+   public class ThreadId {
+       // Atomic integer containing the next thread ID to be assigned
+       private static final AtomicInteger nextId = new AtomicInteger(0);
+
+       // Thread local variable containing each thread's ID
+       private static final ThreadLocal<Integer> threadId =
+           new ThreadLocal<Integer>() {
+               @Override protected Integer initialValue() {
+                   return nextId.getAndIncrement();
+           }
+       };
+
+       // Returns the current thread's unique ID, assigning it if necessary
+       public static int get() {
+           return threadId.get();
+       }
+   }
+   ```
+   示例中，对threadId的注释:Thread local variable containing each thread's ID足以表明threadId（Threadlocal实例）是线程本地变量（thread local variable）。
+- 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，多少老板服务，就会有多少个用自己身份标识了的放在各个老板公文包里的文件夹。每个文件夹的标识，即每个Entry的key就是变量副本，Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。
+- 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。因为线程只能看到和操作自己的变量副本，所以客户在线程里调用threadlocal的set、get等方法都只会返回当然线程的数据，而不用担心在窜到别的线程。
+- 如果把“变量”理解为Threadlocal的set方法的参数value，那么变量副本的说法是说不通的，在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）；变量副本是线程隔离的说法更是说不通的，因为Threadlocal类没有对value有任何处理。作为对象，value仍然可以被其他线程访问和操作，至于是不是线程安全的，这取决于value对象本身，如果其本身是线程安全的，那便是线程安全的，如果不是线程安全的，那也必定不是线程安全的。这也是comments示例里nextId要用AtomicInteger类型的原因。
+
+
 ### 1.2.2 关于弱引用与内存泄漏
 
 # 2. Threadlocal应用
