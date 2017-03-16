@@ -131,7 +131,7 @@ public class ThreadLocal<T> {
 
 ## 1.2 几个问题
 ### 1.2.1 关于变量副本与线程隔离
-- 很多技术博客里都有“变量副本”的说法：
+- 很多关于Threadlocal的技术博客里都有“变量副本”的说法：
  > 当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。  ---- [彻底理解ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)
 
  > ThreadLocal为变量在每个线程中都创建了一个副本。    ---- [Java并发编程：深入剖析ThreadLocal](http://www.cnblogs.com/dolphin0520/p/3920407.html)
@@ -170,13 +170,20 @@ Threadlocal提供了线程本地变量。这些变量与其他一般变量不同
    }
    ```
    示例中，对threadId的注释:Thread local variable containing each thread's ID足以表明threadId（Threadlocal实例）是线程本地变量（thread local variable）。
-- 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，多少老板服务，就会有多少个用自己身份标识了的放在各个老板公文包里的文件夹。每个文件夹的标识，即每个Entry的key就是变量副本，Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。
-- 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。因为线程只能看到和操作自己的变量副本，所以客户在线程里调用threadlocal的set、get等方法都只会返回当然线程的数据，而不用担心在窜到别的线程。
-- 如果把“变量”理解为Threadlocal的set方法的参数value，那么变量副本的说法是说不通的，在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）；变量副本是线程隔离的说法更是说不通的，因为Threadlocal类没有对value有任何处理。作为对象，value仍然可以被其他线程访问和操作，至于是不是线程安全的，这取决于value对象本身，如果其本身是线程安全的，那便是线程安全的，如果不是线程安全的，那也必定不是线程安全的。这也是comments示例里nextId要用AtomicInteger类型的原因。
-
+- 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，多少老板服务，就会有多少个用自己身份标识了的保存在各个老板公文包里的文件夹。Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。从源码可以知道，这个copy也只是概念上的copy，ThreadlocalMap的机制达到了不用真正copy每个Threadlocal，就有每个线程都有自己独立的变量副本的copy效果。
+- 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。客户在任何线程里调用同一个threadlocal的set、get等方法都只会返回在当然线程的数据，而不用担心会窜到别的线程。
+- 如果把“变量”理解为Threadlocal的set方法的参数value，那么变量副本的说法是说不通，在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）；变量副本是线程隔离的说法更是说不通，因为Threadlocal类没有对value做处理，作为对象，value仍然可以被其他线程访问和操作，至于是不是线程安全的，这取决于value对象本身，如果其本身线程安全，那便是线程安全，如果不是线程安全，那也必定不是线程安全。这也是comments示例里nextId要用AtomicInteger类型的原因。
 
 ### 1.2.2 关于弱引用与内存泄漏
+- 关于弱引用与内存泄漏网上也有相关言论
+ > ThreadLocalMap使用ThreadLocal的弱引用作为key，如果一个ThreadLocal没有外部强引用引用他，那么系统gc的时候，这个ThreadLocal势必会被回收，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，如果当前线程再迟迟不结束的话，这些key为null的Entry的value就会一直存在一条强引用链：Thread Ref -> Thread -> ThreaLocalMap -> Entry -> value永远无法回收，造成内存泄露。          ---- [解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)
 
+ > ![Threadlocal引用关系](../images/threadlocal/reference.jpg)
+ > 所以得出一个结论就是只要这个线程对象被gc回收，就不会出现内存泄露          ---- [ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
+
+
+- 首先，明确ThreadlocalMap可能造成内存泄漏的大前提。大前提是：这个线程一直不结束。如果线程迟迟不结束，就会一直存在由Thread Ref到Thread到 ThreaLocalMap到Entry到value的强引用链，如果有很多很大的value，最终造成内存泄漏。只要线程对象结束后被gc回收，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
+- 然后，造成内存泄漏的直接原因是因为key使用了Threadlocal的弱引用？答案是否定的！再仔细读一下大前提，会发现造成内存泄漏跟key是弱引用毛关系都没有。造成内存泄漏的直接原因是ThreadlocalMap里存了很多很大的value对象，这跟key是弱引用还是强引用没有关系。即使Key被设计成
 # 2. Threadlocal应用
 ## 2.1 应用场景
 ## 2.1 JFinal对Threadlocal的应用
