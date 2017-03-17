@@ -171,8 +171,61 @@ Threadlocal提供了线程本地变量。这些变量与其他一般变量不同
    ```
    示例中，对threadId的注释:Thread local variable containing each thread's ID足以表明threadId（Threadlocal实例）是线程本地变量（thread local variable）。
 - 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，多少老板服务，就会有多少个用自己身份标识了的保存在各个老板公文包里的文件夹。Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。从源码可以知道，这个copy也只是概念上的copy，ThreadlocalMap的机制达到了不用真正copy每个Threadlocal，就有每个线程都有自己独立的变量副本的copy效果。
-- 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。客户在任何线程里调用同一个threadlocal的set、get等方法都只会返回在当然线程的数据，而不用担心会窜到别的线程。
-- 如果把“变量”理解为Threadlocal的set方法的参数value，那么变量副本的说法是说不通，在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）；变量副本是线程隔离的说法更是说不通，因为Threadlocal类没有对value做处理，作为对象，value仍然可以被其他线程访问和操作，至于是不是线程安全的，这取决于value对象本身，如果其本身线程安全，那便是线程安全，如果不是线程安全，那也必定不是线程安全。这也是comments示例里nextId要用AtomicInteger类型的原因。
+- 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。客户在任何线程里调用同一个threadlocal的set、get等方法都只会返回在当然线程的数据。
+- 如果把“变量”理解为Threadlocal的set方法的参数或initialValue方法的返回值，那么变量副本的说法是说不通，变量副本是线程隔离的说法同样如此，因为在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）。
+- set方法的参数和initialValue方法的返回值作为实例对象，如果其引用能被其他线程拿到，就能被访问和操作，这种情况下value的线程安全取决于其对象本身，如果本身线程安全，那便是线程安全，如果不是线程安全，那也必定不是线程安全。这也是comments示例里nextId要用AtomicInteger类型的原因（如果把nextId声明为Integer，initialValue的返回值为nextId+1，那threadId势必会混乱）。另一方面，如果引用不会被其他线程拿到，只能被当前这一个线程访问，也就不存在线程安全问题。
+  ```java
+  public class ThreadSafety {
+
+      static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+      static ThreadLocal<SimpleDateFormat> threadlocal = new ThreadLocal<SimpleDateFormat>() {
+          protected SimpleDateFormat initialValue() {
+              /*
+  			 * 方式1：sdf可以被多个线程访问，不是线程安全的
+  			 */
+              //return sdf;
+
+  			/*
+  			 * 方式2：只能被当前这一个线程访问，不存在线程安全问题
+  			 */
+              return new SimpleDateFormat("yyyy-MM-dd HH:mm");
+          }
+      };
+
+      public static void main(String[] args) throws InterruptedException {
+
+          new Thread(() -> {
+              threadlocal.get().setTimeZone(TimeZone.getTimeZone("CTT"));//CTT - Asia/Shanghai
+              printTimeZone();
+              try {Thread.sleep(3000);} catch (Exception e) {}
+              printTimeZone();
+          }).start();
+
+          Thread.sleep(1000);
+          threadlocal.get().setTimeZone(TimeZone.getTimeZone("JST"));//JST - Asia/Tokyo
+          printTimeZone();
+      }
+
+      private static void printTimeZone() {
+          System.out.println(Thread.currentThread().getName() + ": timeZone=" + threadlocal.get().getTimeZone());
+
+      }
+
+  }
+  ```
+  方式1的执行结果：
+  ```java
+  Thread-0: timeZone=sun.util.calendar.ZoneInfo[id="CTT",offset=28800000,dstSavings=0,useDaylight=false,transitions=19,lastRule=null]
+  main: timeZone=sun.util.calendar.ZoneInfo[id="JST",offset=32400000,dstSavings=0,useDaylight=false,transitions=10,lastRule=null]
+  Thread-0: timeZone=sun.util.calendar.ZoneInfo[id="JST",offset=32400000,dstSavings=0,useDaylight=false,transitions=10,lastRule=null]
+  ```
+ 方式2的执行结果
+  ```java
+  Thread-0: timeZone=sun.util.calendar.ZoneInfo[id="CTT",offset=28800000,dstSavings=0,useDaylight=false,transitions=19,lastRule=null]
+  main: timeZone=sun.util.calendar.ZoneInfo[id="JST",offset=32400000,dstSavings=0,useDaylight=false,transitions=10,lastRule=null]
+  Thread-0: timeZone=sun.util.calendar.ZoneInfo[id="CTT",offset=28800000,dstSavings=0,useDaylight=false,transitions=19,lastRule=null]
+  ```
 
 ### 1.2.2 关于弱引用与内存泄漏
 - 关于弱引用与内存泄漏的相关言论
@@ -190,39 +243,99 @@ Threadlocal提供了线程本地变量。这些变量与其他一般变量不同
 
 - ThreadlocalMap造成内存泄漏的前提：没有对ThreadlocalMap的Entry对象进行有效的管理，这个线程还迟迟不结束（销毁）。<br>只要对Entry对象进行了有效的防内存泄漏管理，就不会出现内存泄漏；只要线程对象结束后被gc回收，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
 - ThreadlocalMap造成内存泄漏的直接原因是key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。如上图所示，当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。
-- 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除Threadlocal1也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()等方法，ThreadlocalMap能探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
+- 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除Threadlocal1也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()方法，或者往ThreadlocalMap存入新的变量副本时，ThreadlocalMap会探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
 - 当然，使用ThreadLocal的弱引用作为key的这个设计在很大程度避免了内存泄漏，但不表示可以完全避免内存泄漏。<br>实例1:[ThreadLocal & Memory Leak
 ](http://stackoverflow.com/questions/17968803/threadlocal-memory-leak)<br>实例2:[A ThreadLocal Memory Leak](https://blog.codecentric.de/en/2008/09/a-threadlocal-memory-leak/)
-- 开发中如何避免内存泄漏<br>如果你能确定使用Threadlocal的线程会尽快结束（就像绝大多数线程一样），那就放心用吧。皮之不存，毛将焉附。<br>如果不确定线程会何时结束，或者本身就是线程池的线程，那么[A ThreadLocal Memory Leak](https://blog.codecentric.de/en/2008/09/a-threadlocal-memory-leak/)的建议：Correctly developed there is absolutely no risk in using thread local :
+- 如果你new了一个线程的，能确定它会快速结束，那就放心用吧。皮之不存，毛将焉附。如果你创建了一个线程池，请谨慎使用Threadlocal。如果只是在一个别人给定的线程里工作，在了解线程的所有细节前，请谨慎使用Threadlocal。
 
-  ```java
-  protected ThreadLocal myThreadLocal = new ThreadLocal();
-
-  public void doFilter (ServletRequest req, ServletResponse res, chain) throws IOException, ServletException {
-    try {
-
-      // Set ThreadLocal (eg. to store heavy computation result done only once per request)
-      myThreadLocal.set(computeSomeLargeObject());
-
-      chain.doFilter(req, res);
-
-    } finally {
-      // Important : cleanup ThreaLocal to prevent memory leak
-      userIsSmartTL.remove();
-    }
-  }
-  ```
-具体实现可以参看[2.2 JFinal对Threadlocal的应用](#jump)。
 # 2. Threadlocal应用
 ## 2.1 应用场景
-- 官方建议的应用场景：
-> ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g.,a user ID or Transaction ID).<br>
+ Threadlocal类Comments中关系应用场景的描述
+ > ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g.,a user ID or Transaction ID).<br>
 如果开发者希望将类的某个状态（user ID或者transaction ID）与线程关联，则可以考虑使用ThreadLocal。ThreadLocal通常被声明为private static。
 
-这也是通常所说的：用Threadlocal避免参数的传递。例如，在web请求中，当前用户的userid一般只能在Controller中获取到，而userid在Service层乃至Model层都可能会被用到。这时可以把Threadlocal封装到BaseController中，用Threadlocal来传递userid。
-- Threadlocal大多应用在框架中。
-## <span id="jump">2.2 JFinal对Threadlocal的应用</span>
 
+### 2.1.1 用Threadlocal在特定线程中共享对象。
+比如，在web请求中，当前用户的userid一般只能在Controller中获取到，而userid在Service层乃至Model层都可能会被用到。<br>这时可以考虑用Threadlocal把userid绑定在Thread里，用于避免userid被频繁传递，达到共享userid的效果。当然，最后要调用remove方法，防止内存泄漏。参看[JFinal对Threadlocal的应用](#usage1)。
+### 2.1.2 线程池里，用Threadlocal让对象得到复用。
+比如，线程池里，如果线程每次被调用都会用到SimpleDateFormat的format方法，不管是每次都new一个新的SimpleDateFormat还是同步对一个全局SimpleDateFormat实例的访问都不是很好的方式。<br>这时可以考虑用Threadlocal为每个Thread绑定它自己的SimpleDateFormat，用于复用。参看[JFinal对Threadlocal的应用](#usage2)。当然，这时候也要考虑内存泄漏问题。如果是大对象就更要进行各种权衡，试想一下把10M的对象绑定到线程池的100个线程里。
+
+## 2.2 JFinal对Threadlocal的应用
+Threadlocald在JFinal3.0中有3次应用：com.jfinal.core.ActionReporter类，com.jfinal.plugin.activerecord.Config类，com.jfinal.plugin.redis.Cache类。
+### 2.2.1 ActionReporter类
+<span id="usage2">ActionReporter类对Threadlocal的应用</span>，就是为了让SimpleDateFormat在线程池的线程里得到复用。
+  ```java
+  public class ActionReporter {
+    private static final ThreadLocal<SimpleDateFormat> sdf = new ThreadLocal<SimpleDateFormat>() {
+      protected SimpleDateFormat initialValue() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      }
+    };
+    public static final void report(String target, Controller controller, Action action) {
+  		StringBuilder sb = new StringBuilder("\nJFinal action report -------- ").append(sdf.get().format(new Date())).append(" ------------------------------\n");
+      //省略其它代码
+  	}	 
+     //省略其它代码
+  }
+  ```
+ActionReporter类用于开发模式下记录并输出请求信息。<br>开发模式下，每个web请求都会调用一次report()方法，恰好当前线程又是容器的线程池中的，便可以把SimpleDateFormat绑定到线程里复用。<br>虽然每次请求都只会调用一次sdf.get().format(new Date())，但是达到了复用Thread时复用SimpleDateFormat的效果，而不必为每次请求都new一个新的SimpleDateFormat。<br>另外，如果一个web请求会多次调用了sdf.get()方法，也一定会起到在这个线程里共享sdf的效果。<br>最后，这里没有显式地调用sdf.remove()方法，因为SimpleDateFormat对象每个请求都必用，在开发模式下没有例外，SimpleDateFormat对象可以也应该随着Thread一起存活，直到当前应用terminate。<br>如果每次请求最后都调用sdf.remove()方法，那么每次调用sdf.get()方法都会转而调用initialValue()方法，最终每次都会new一个SimpleDateFormat对象，这样的话，和每次直接为线程new一个SimpleDateFormat对象就没有任何区别。
+### 2.2.2 Config类和Cache类
+<span id="usage2">Config类和Cache类都是为在特定线程中共享对象而设计的。</span>这里以Cache的threadLocalJedis为例。
+  ```java
+  public class Cache {
+  	protected final ThreadLocal<Jedis> threadLocalJedis = new ThreadLocal<Jedis>();
+
+  	public Jedis getThreadLocalJedis() {
+  		return threadLocalJedis.get();
+  	}
+
+  	public void setThreadLocalJedis(Jedis jedis) {
+  		threadLocalJedis.set(jedis);
+  	}
+
+  	public void removeThreadLocalJedis() {
+  		threadLocalJedis.remove();
+  	}
+    //省略其它代码
+  }
+  ```
+  ```java
+  /**
+   * RedisInterceptor 用于在同一线程中共享同一个 jedis 对象，提升性能.
+   * 目前只支持主缓存 mainCache，若想更多支持，参考此拦截器创建新的拦截器
+   * 改一下Redis.use() 为 Redis.use(otherCache) 即可
+   */
+  public class RedisInterceptor implements Interceptor {
+
+  	/**
+  	 * 通过继承 RedisInterceptor 类并覆盖此方法，可以指定
+  	 * 当前线程所使用的 cache
+  	 */
+  	protected Cache getCache() {
+  		return Redis.use();
+  	}
+
+  	public void intercept(Invocation inv) {
+  		Cache cache = getCache();
+  		Jedis jedis = cache.getThreadLocalJedis();
+  		if (jedis != null) {
+  			inv.invoke();
+  			return ;
+  		}
+
+  		try {
+  			jedis = cache.jedisPool.getResource();
+  			cache.setThreadLocalJedis(jedis);
+  			inv.invoke();
+  		}
+  		finally {
+  			cache.removeThreadLocalJedis();
+  			jedis.close();
+  		}
+  	}
+  }
+  ```
+  调用threadLocalJedis的线程也是容器的线程池中的线程，但threadLocalJedis并不是每个线程每次都要用到，所以在每次调用的最后都调用cache.removeThreadLocalJedis()来防止内存泄漏。
 # 3. Threadlocal设计
 ## 3.1 我来实现线程本地存储
 ### 3.1.1说明
