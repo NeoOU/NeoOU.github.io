@@ -11,13 +11,14 @@ date: 2017/03/13
 - Thread、Threadlocal、ThreadlocalMap、ThreadlocalMap.Entry的关系就好比老板（Thread）、助理（Threadlocal）、老板的公文包（ThreadlocalMap）、公文包里的文件夹（ThreadlocalMap.Entry）。
 - 公文包（ThreadlocalMap）是老板（Thread）的，要么没有，要么只有一个。
   ```java
+  //老板
   public class Thread implements Runnable {
      //公文包是老板的，而且如果有，就只有一个，默认没有
      ThreadLocal.ThreadLocalMap threadLocals = null;
   }
   ```
 
-- 老板（Thread）可以有多个助理（Threadlocal），在老板的指挥下，助理们都可以往公文包（ThreadlocalMap）或存或取或移除自己的文件（ThreadlocalMap.Entry.value）。为了便于管理，助理们要把文件放进一个用自己身份标识了的文件夹（ThreadlocalMap.Entry），然后再把文件夹放进公文包。助理只能拿到自己的文件夹，也便只能管理自己文件夹里的文件。当然，助理在或存或取或移除文件之前，都要先判断老板有没有公文包，公文包里有没有用记身份标识了的文件夹。如果没有就要创建新的。
+- 老板（Thread）可以有多个助理（Threadlocal），在老板的召唤下，助理们都可以往公文包（ThreadlocalMap）或存或取或移除自己的文件（ThreadlocalMap.Entry.value）。为了便于管理，助理们要把文件放进一个用自己身份标识了的文件夹（ThreadlocalMap.Entry），然后再把文件夹放进公文包。助理只能拿到自己的文件夹，也便只能管理自己文件夹里的文件。当然，助理在或存或取或移除文件之前，都要先判断老板有没有公文包，公文包里有没有用记身份标识了的文件夹。如果没有就要创建新的。
   ```java
   //助理
   public class ThreadLocal<T> {
@@ -46,7 +47,7 @@ date: 2017/03/13
   }
   ```
 
-- 老板（Thread）要操作某个文件（ThreadlocalMap.Entry.value）时就把管理这个文件的助理（Threadlocal）召唤到身边，由助理代为操作。助理操作自己放在当前老板公文包里的文件，要做的就是：在老板那拿到公文包（ThreadlocalMap），在公文包里拿到自己的文件夹（ThreadlocalMap.Entry），在文件夹里拿到文件。如果老板想和助理解除关系，那就把标识了该助理身份的文件夹取出来连带文件一起仍了吧。
+- 老板（Thread）要操作某个文件（ThreadlocalMap.Entry.value）时就把管理这个文件的助理（Threadlocal）召唤到身边，由助理代为操作。助理操作自己放在当前老板公文包里的文件，要做的就是：在老板那拿到公文包（ThreadlocalMap），在公文包里拿到自己的文件夹（ThreadlocalMap.Entry），在文件夹里拿到文件。如果老板想和助理解除关系，就让这个助理把他的文件夹取出来连带文件一起移除。当有助理要存取文件或新建文件夹时，老板也会委托这个助理查看所有文件夹，如果发现有文件夹指向的助理已经die，也要把文件夹及文件从公文包里移除。
 ```java
 public class ThreadLocal<T> {
    ThreadLocalMap getMap(Thread t) {//找老板要公文包
@@ -103,7 +104,7 @@ public class ThreadLocal<T> {
                 return;
             }
 
-            if (k == null) {
+            if (k == null) {//判断其他文件夹指向的助理是否存活
                 replaceStaleEntry(key, value, i);
                 return;
             }
@@ -143,8 +144,8 @@ public class ThreadLocal<T> {
  copy of the variable.
 
  意译过来大概是这样：<br>
-Threadlocal提供了线程本地变量。这些变量与其他一般变量不同，通过它的get()或set()方法，每个线程都保存一份该变量的副本。<br>
-- 要厘清“变量副本”是什么，首先要厘清“变量”是什么。Thread的本地变量是指Threadlocal的set方法的参数value？按引用的两篇文章的意思是这样的。而事实不是！线程本地变量（thread-local variable）应该就是指Threadlocal实例。
+这个类提供线程本地变量。这些变量与其他一般变量不同，通过它的get()或set()方法，每个线程都保存一份该变量的副本。<br>
+- 要厘清“变量副本”是什么，首先要厘清“变量”是什么。Thread的本地变量是指Threadlocal的set方法的参数value或者是initialValue方法的返回值？按引用的两篇文章的意思是这样的。而事实不是！线程本地变量（thread-local variable）应该就是指Threadlocal实例。
  - 这点在Threadlocal类的comments里有说明：
   > .... each thread that accesses one (via its {@code get} or {@code set} method) has its own，....
 
@@ -170,10 +171,10 @@ Threadlocal提供了线程本地变量。这些变量与其他一般变量不同
    }
    ```
    示例中，对threadId的注释:Thread local variable containing each thread's ID足以表明threadId（Threadlocal实例）是线程本地变量（thread local variable）。
-- 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，多少老板服务，就会有多少个用自己身份标识了的保存在各个老板公文包里的文件夹。Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。从源码可以知道，这个copy也只是概念上的copy，ThreadlocalMap的机制达到了不用真正copy每个Threadlocal，就有每个线程都有自己独立的变量副本的copy效果。
+- 厘清了“变量”是指Threadlocal的实例，“变量副本”就好理解了。正像之前比喻的，助理（Threadlocal）可以为多个老板（Thread）服务，为多少老板服务，就会有多少个用自己身份标识了的保存在各个老板公文包里的文件夹。Threadlocal在一个Thread的ThreadlocalMap里做一次保存，就是一次copy。从源码可以知道，这个copy也只是概念上的copy，ThreadlocalMap的机制达到了不用真正copy每个Threadlocal，就有每个线程都有自己独立的变量副本的copy效果。
 - 这个时候，就可以水到渠成地说：变量副本是线程隔离的，每个线程只能看到和操作自己的副本。客户在任何线程里调用同一个threadlocal的set、get等方法都只会返回在当然线程的数据。
-- 如果把“变量”理解为Threadlocal的set方法的参数或initialValue方法的返回值，那么变量副本的说法是说不通，变量副本是线程隔离的说法同样如此，因为在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）。
-- set方法的参数和initialValue方法的返回值作为实例对象，如果其引用能被其他线程拿到，就能被访问和操作，这种情况下value的线程安全取决于其对象本身，如果本身线程安全，那便是线程安全，如果不是线程安全，那也必定不是线程安全。这也是comments示例里nextId要用AtomicInteger类型的原因（如果把nextId声明为Integer，initialValue的返回值为nextId+1，那threadId势必会混乱）。另一方面，如果引用不会被其他线程拿到，只能被当前这一个线程访问，也就不存在线程安全问题。
+- 如果把“变量”理解为Threadlocal的set方法的参数或initialValue方法的返回值，那么变量副本的说法说不通，变量副本是线程隔离的说法同样如此，因为在Threadlocal的源码中，没有对value参数进行拷贝（没有任何处理）。
+- set方法的参数和initialValue方法的返回值作为实例对象，如果其引用能被其他线程拿到，就能被访问和操作，不会是线程隔离的。这种情况下value的线程安全取决于其对象本身，如果本身线程安全，那便是线程安全，如果不是线程安全，那也必定不是线程安全。这也是comments示例里nextId要用AtomicInteger类型的原因（如果把nextId声明为Integer，initialValue的返回值为nextId+1，那threadId势必会混乱）。另一方面，如果引用不会被其他线程拿到，只能被当前这一个线程访问，也就不存在线程安全问题。
   ```java
   public class ThreadSafety {
 
@@ -241,18 +242,18 @@ Threadlocal提供了线程本地变量。这些变量与其他一般变量不同
  >  ---- [百度百科](http://baike.baidu.com/link?url=nEyGZ2NIAm86HqsZwM0tj6HXCXyB_tDcp6gDLY1zCMxhYyV6D9Em4oyQXd-g7Z3YQlSMWy5bMG9LV64Vq8y_gvzTUnOKyi6ZfqYTetrC_pxTB78_OZFyuKa69m6LfnB3)
 
 
-- ThreadlocalMap造成内存泄漏的前提：没有对ThreadlocalMap的Entry对象进行有效的管理，这个线程还迟迟不结束（销毁）。<br>只要对Entry对象进行了有效的防内存泄漏管理，就不会出现内存泄漏；只要线程对象结束后被gc回收，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
-- ThreadlocalMap造成内存泄漏的直接原因是key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。如上图所示，当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。
-- 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除Threadlocal1也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()方法，或者往ThreadlocalMap存入新的变量副本时，ThreadlocalMap会探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
-- 当然，使用ThreadLocal的弱引用作为key的这个设计在很大程度避免了内存泄漏，但不表示可以完全避免内存泄漏。<br>实例1:[ThreadLocal & Memory Leak
+- 造成内存泄漏的前提：没有对ThreadlocalMap的Entry对象进行有效管理，这个线程还迟迟不结束（销毁）。<br>只要对Entry对象进行了有效的防内存泄漏管理，就不会出现内存泄漏；只要线程对象快速结束，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
+- 造成内存泄漏的直接原因是ThreadlocalMap的key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。如上图所示，当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。
+- 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除用Threadlocal1做key的Entry也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()方法，或者往ThreadlocalMap存入新的变量副本时，ThreadlocalMap会探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
+- 当然，使用ThreadLocal的弱引用作为key的这个设计在很大程度避免了内存泄漏，但不能完全避免内存泄漏。<br>实例1:[ThreadLocal & Memory Leak
 ](http://stackoverflow.com/questions/17968803/threadlocal-memory-leak)<br>实例2:[A ThreadLocal Memory Leak](https://blog.codecentric.de/en/2008/09/a-threadlocal-memory-leak/)
-- 如果你new了一个线程的，能确定它会快速结束，那就放心用吧。皮之不存，毛将焉附。如果你创建了一个线程池，请谨慎使用Threadlocal。如果只是在一个别人给定的线程里工作，在了解线程的所有细节前，请谨慎使用Threadlocal。
+- 如果你new了一个线程，能确定它会快速结束，那就放心用Threadlocal。皮之不存，毛将焉附。如果你创建了一个线程池，请谨慎使用Threadlocal。如果只是在一个别人给定的线程里工作，在了解线程的所有细节前，请谨慎使用Threadlocal。
 
 # 2. Threadlocal应用
 ## 2.1 应用场景
  Threadlocal类Comments中关系应用场景的描述
  > ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g.,a user ID or Transaction ID).<br>
-如果开发者希望将类的某个状态（user ID或者transaction ID）与线程关联，则可以考虑使用ThreadLocal。ThreadLocal通常被声明为private static。
+如果开发者希望将某个状态（user ID或者transaction ID）与线程关联，则可以考虑使用ThreadLocal。ThreadLocal通常被声明为private static。
 
 
 ### 2.1.1 用Threadlocal在特定线程中共享对象。
@@ -278,7 +279,7 @@ Threadlocald在JFinal3.0中有3次应用：com.jfinal.core.ActionReporter类，c
      //省略其它代码
   }
   ```
-ActionReporter类用于开发模式下记录并输出请求信息。<br>开发模式下，每个web请求都会调用一次report()方法，恰好当前线程又是容器的线程池中的，便可以把SimpleDateFormat绑定到线程里复用。<br>虽然每次请求都只会调用一次sdf.get().format(new Date())，但是达到了复用Thread时复用SimpleDateFormat的效果，而不必为每次请求都new一个新的SimpleDateFormat。<br>另外，如果一个web请求会多次调用了sdf.get()方法，也一定会起到在这个线程里共享sdf的效果。<br>最后，这里没有显式地调用sdf.remove()方法，因为SimpleDateFormat对象每个请求都必用，在开发模式下没有例外，SimpleDateFormat对象可以也应该随着Thread一起存活，直到当前应用terminate。<br>如果每次请求最后都调用sdf.remove()方法，那么每次调用sdf.get()方法都会转而调用initialValue()方法，最终每次都会new一个SimpleDateFormat对象，这样的话，和每次直接为线程new一个SimpleDateFormat对象就没有任何区别。
+ActionReporter类用于开发模式下记录并输出请求信息。<br>开发模式下，每个web请求都会调用一次report()方法，恰好当前线程又是容器的线程池中的线程，便可以把SimpleDateFormat绑定到线程里复用。<br>虽然每次请求都只会调用一次sdf.get().format(new Date())，但是达到了复用Thread时复用SimpleDateFormat的效果，而不必为每次请求都new一个新的SimpleDateFormat。<br>如果一个web请求会多次调用sdf.get()方法，也一定会起到在这个线程里共享sdf的效果。<br>另外，这里没有显式地调用sdf.remove()方法，因为SimpleDateFormat对象每个请求都必用，在开发模式下没有例外，SimpleDateFormat对象可以（对象不大）也应该（每次都要用）随着Thread一起存活，直到当前应用terminate。<br>如果每次请求最后都调用sdf.remove()方法，那么每次调用sdf.get()方法都会转而调用initialValue()方法，最终每次都会new一个SimpleDateFormat对象，这样的话，和每次直接为线程new一个SimpleDateFormat对象就没有任何区别。
 ### 2.2.2 Config类和Cache类
 <span id="usage2">Config类和Cache类都是为在特定线程中共享对象而设计的。</span>这里以Cache的threadLocalJedis为例。
   ```java
@@ -353,7 +354,7 @@ public class MyThread extends Thread {
     /**
      * 1. 线程可以有多个本地变量，一个本地变量对应一个值（对象），第一反应便是Map
      * 2. 并不是每个线程都一定会有threadlocalMap，没有必要在声明时就初始化。
-     * 3. Map的key指定为String类型，value指定为Object类型。这明显不是一个好实现
+     * 3. Map的key指定为String类型，value指定为Object类型。key即为本地变量，value即为本地变量对应的值
      */
     private Map<String, Object> threadlocalMap;
 
@@ -476,11 +477,11 @@ Process finished with exit code 0
  public class MyThread extends Thread {
 
     /**
-     * 1. 存储多个不同的键值对，第一反应便是Map
+     * 1. 线程可以有多个本地变量，一个本地变量对应一个值（对象），第一反应便是Map
      * 2. 并不是每个线程都一定会有threadlocalMap，没有必要在声明时就初始化。
-     * 3. Map的key指定为String类型，value指定为Object类型。这明显不是一个好实现
+     * 3. Map的key指定为String类型，value指定为Object类型。key即为本地变量，value即为本地变量对应的值
      *
-     * from version 2.0
+     * since version 2.0
      * 为了配合MyThreadlocalodl类的泛型，将Map的key改为Object类型
      */
     private Map<Object, Object> threadlocalMap;
@@ -489,13 +490,13 @@ Process finished with exit code 0
      * 1. 确保获取到的threadlocalMap是当前线程的threadlocalMap
      * 2. 第一次获取threadlocalMap时对其初始化
      *
-     * from version 2.0
+     * since version 2.0
      * 3. 将方法设为包级私有
      */
      Map<Object, Object> getThreadlocalMap() {
 
         /*
-         *from version 2.0
+         *since version 2.0
          *已经在MyThreadlocal类中确保是通过Thread.currentThread()获取threadlocalMap
          *
         //确保获取到的threadlocalMap是当前线程的threadlocalMap
@@ -565,7 +566,7 @@ public class MyThreadlocal<S,T> {
                 new MyThread(() -> {
                     /*
                      * getThreadlocalMap()方法设置为包级私有且分包后
-                     * 不能再能过((MyThread)Thread.currentThread()).getThreadlocalMap()调用
+                     * 不能再调用((MyThread)Thread.currentThread()).getThreadlocalMap()
                      */
                     set(idStorage);
                     get(idStorage);
@@ -633,10 +634,13 @@ public class MyThreadlocal<S,T> {
 - 结论
  - 基本已经满足需求
  - 有点不顺眼的是，MyThread类的threadlocalmap定义成了Map&lt;Object,Object&gt;类型，可是没必要再给MyThread引入泛型，毕竟并不是每一个Thread都一定会有thread-local variables 。
- - 这样设计更要注意对Map的管理，防止内存泄漏。
+ - 这样设计加大了用户对key的管理难度。而key只是获取value的一把钥匙，
+ - 这样设计一样要注意对Map的管理，防止内存泄漏。
 
 ## 3.2 大师的设计
 ## 3.3 Threadlocal模式应用
+- Threadlocal实现的关键点在于有currentThread()方法来获取当前线程。
+- 要复用Threadlocal模式，首先，“老板”那里就要有类似currentThread()的方法。
 
 # 4. 结语
 - 有错误或有疑义的地方，欢迎批评指定，会持续更新改正。
