@@ -234,7 +234,7 @@ public class ThreadLocal<T> {
  ---- [解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)
 
  > threadlocal里面使用了一个存在弱引用的map,当释放掉threadlocal的强引用以后,map里面的value却没有被回收.而这块value永远不会被访问到了. 所以存在着内存泄露. 最好的做法是将调用threadlocal的remove方法.threadlocal的生命周期中,都存在这些引用. 看下图: 实线代表强引用,虚线代表弱引用.
- ![Threadlocal引用关系](../images/threadlocal/reference.jpg)     ---- [ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
+ ![Threadlocal弱引用关系](../images/threadlocal/reference.jpg)     ---- [ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
 
 
 - 什么是内存泄漏
@@ -243,7 +243,7 @@ public class ThreadLocal<T> {
 
 
 - 造成内存泄漏的前提：没有对ThreadlocalMap的Entry对象进行有效管理，这个线程还迟迟不结束（销毁）。<br>只要对Entry对象进行了有效的防内存泄漏管理，就不会出现内存泄漏；只要线程对象快速结束，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
-- 造成内存泄漏的直接原因是ThreadlocalMap的key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。如上图所示，当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。
+- 造成内存泄漏的直接原因是ThreadlocalMap的key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。![Threadlocal强引用关系](../images/threadlocal/reference-strong.jpg)
 - 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除用Threadlocal1做key的Entry也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()方法，或者往ThreadlocalMap存入新的变量副本时，ThreadlocalMap会探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
 - 当然，使用ThreadLocal的弱引用作为key的这个设计在很大程度避免了内存泄漏，但不能完全避免内存泄漏。<br>实例1:[ThreadLocal & Memory Leak
 ](http://stackoverflow.com/questions/17968803/threadlocal-memory-leak)<br>实例2:[A ThreadLocal Memory Leak](https://blog.codecentric.de/en/2008/09/a-threadlocal-memory-leak/)
@@ -634,18 +634,29 @@ public class MyThreadlocal<S,T> {
 - 结论
  - 基本已经满足需求
  - 有点不顺眼的是，MyThread类的threadlocalmap定义成了Map&lt;Object,Object&gt;类型，可是没必要再给MyThread引入泛型，毕竟并不是每一个Thread都一定会有thread-local variables 。
- - 这样设计加大了用户对key的管理难度。而key只是获取value的一把钥匙，
- - 这样设计一样要注意对Map的管理，防止内存泄漏。
+ - 同样要注意对Map的管理，防止内存泄漏。
+ - 这样让用户自己管理key（本地变量），可以只有一个全局的MyThreadlocal对象，MyThreadlocal变成了一个纯粹的工具类，但同时增加了用户对key的管理难度，不利于协同开发。
 
-## 3.2 大师的设计
-## 3.3 Threadlocal模式应用
+## 3.2 Threadlocal设计
 - Threadlocal实现的关键点在于有currentThread()方法来获取当前线程。
-- 要复用Threadlocal模式，首先，“老板”那里就要有类似currentThread()的方法。
+- 既然ThreadlocalMap是Thread的，那么为什么把ThreadlocalMap设计成Threadlocal的静态内部类，而非Thread的。下面这段话可能是一个很好的阐释：
+> First it should be noted that ThreadLocalMap is a package-private class, thus it's not a part of the API, but an implementation detail which may change in future JDK versions if necessary.
+
+ > Why it's not non-static? Just because non-static nested class (inner class) is bound to the concrete instance of the outer class. In our case it should be bound to the concrete ThreadLocal variable. This is just wrong: ThreadLocalMap is bounded to the thread and stores all the values of all ThreadLocal variables for given thread. Thus binding it to the concrete ThreadLocal instance is meaningless.
+
+ > Maybe it looks more logical to make ThreadLocalMap the inner class of the Thread class. However ThreadLocalMap just does not need the Thread object to operate, so this would just add some unnecessary overhead. The reason it's located inside the ThreadLocal class is that the ThreadLocal is responsible for ThreadLocalMap creation. ThreadLocalMap is created for current thread only when the first ThreadLocal is set in this thread, but after that the same ThreadLocalMap is used for all other ThreadLocal variables.
+
+ > Another alternative would be to hold ThreadLocalMap as separate package-private class in java.lang package. Nothing wrong with such option: it's just a matter of taste and depends on what developers want more: to group related functionality in single source file or to keep source file length smaller.
+
+ >  ----   [Why design ThreadLocalMap as static nest class in ThreadLocal?](http://stackoverflow.com/questions/34781183/why-design-threadlocalmap-as-static-nest-class-in-threadlocal)
 
 # 4. 结语
 - 有错误或有疑义的地方，欢迎批评指定，会持续更新改正。
-- 文中代码地址：
-- 参考文章
- - [Java并发编程：深入剖析ThreadLocal](http://www.cnblogs.com/dolphin0520/p/3920407.html)
- - [解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)
- - [Is it really my job to clean up ThreadLocal resources when classes have been exposed to a thread pool?](http://stackoverflow.com/questions/13852632/is-it-really-my-job-to-clean-up-threadlocal-resources-when-classes-have-been-exp)
+- 文中及其他一些测试代码地址：[JdkSourcecodeAnalysis-Threadlocal](https://github.com/oomeD/JdkSourcecodeAnalysis/tree/master/src/lang/threadlocal)
+- 参考文章：<br>
+[彻底理解ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)<br>
+[ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)<br>
+[Java并发编程：深入剖析ThreadLocal](http://www.cnblogs.com/dolphin0520/p/3920407.html)
+[解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)<br>
+[Is it really my job to clean up ThreadLocal resources when classes have been exposed to a thread pool?](http://stackoverflow.com/questions/13852632/is-it-really-my-job-to-clean-up-threadlocal-resources-when-classes-have-been-exp)<br>  
+[Why design ThreadLocalMap as static nest class in ThreadLocal?](http://stackoverflow.com/questions/34781183/why-design-threadlocalmap-as-static-nest-class-in-threadlocal)
