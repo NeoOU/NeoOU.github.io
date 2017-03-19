@@ -3,7 +3,8 @@ title: Threadlocal
 category:
 - JDK源码
 - lang
-date: 2017/03/13
+date: 2017/03/20
+copyright: true
 ---
 
 # 1. Threadlocal源码
@@ -46,7 +47,7 @@ date: 2017/03/13
     }
   }
   ```
-
+<!--more-->
 - 老板（Thread）要操作某个文件（ThreadlocalMap.Entry.value）时就把管理这个文件的助理（Threadlocal）召唤到身边，由助理代为操作。助理操作自己放在当前老板公文包里的文件，要做的就是：在老板那拿到公文包（ThreadlocalMap），在公文包里拿到自己的文件夹（ThreadlocalMap.Entry），在文件夹里拿到文件。如果老板想和助理解除关系，就让这个助理把他的文件夹取出来连带文件一起移除。当有助理要存取文件或新建文件夹时，老板也会委托这个助理查看所有文件夹，如果发现有文件夹指向的助理已经die，也要把文件夹及文件从公文包里移除。
 ```java
 public class ThreadLocal<T> {
@@ -143,8 +144,7 @@ public class ThreadLocal<T> {
  {@code get} or {@code set} method) has its own, independently initialized
  copy of the variable.
 
- 意译过来大概是这样：<br>
-这个类提供线程本地变量。这些变量与其他一般变量不同，通过它的get()或set()方法，每个线程都保存一份该变量的副本。<br>
+ 意译过来大概是这样：<br>这个类提供线程本地变量。这些变量与其他一般变量不同，通过它的get()或set()方法，每个线程都保存一份该变量的副本。
 - 要厘清“变量副本”是什么，首先要厘清“变量”是什么。Thread的本地变量是指Threadlocal的set方法的参数value或者是initialValue方法的返回值？按引用的两篇文章的意思是这样的。而事实不是！线程本地变量（thread-local variable）应该就是指Threadlocal实例。
  - 这点在Threadlocal类的comments里有说明：
   > .... each thread that accesses one (via its {@code get} or {@code set} method) has its own，....
@@ -182,14 +182,11 @@ public class ThreadLocal<T> {
 
       static ThreadLocal<SimpleDateFormat> threadlocal = new ThreadLocal<SimpleDateFormat>() {
           protected SimpleDateFormat initialValue() {
-              /*
-  			 * 方式1：sdf可以被多个线程访问，不是线程安全的
-  			 */
+
+              //方式1：sdf可以被多个线程访问，不是线程安全的
               //return sdf;
 
-  			/*
-  			 * 方式2：只能被当前这一个线程访问，不存在线程安全问题
-  			 */
+              //方式2：只能被当前这一个线程访问，不存在线程安全问题
               return new SimpleDateFormat("yyyy-MM-dd HH:mm");
           }
       };
@@ -234,7 +231,7 @@ public class ThreadLocal<T> {
  ---- [解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)
 
  > threadlocal里面使用了一个存在弱引用的map,当释放掉threadlocal的强引用以后,map里面的value却没有被回收.而这块value永远不会被访问到了. 所以存在着内存泄露. 最好的做法是将调用threadlocal的remove方法.threadlocal的生命周期中,都存在这些引用. 看下图: 实线代表强引用,虚线代表弱引用.
- ![Threadlocal弱引用关系](../images/threadlocal/reference.jpg)     ---- [ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
+ ![Threadlocal弱引用关系](/images/threadlocal/reference.jpg)     ---- [ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
 
 
 - 什么是内存泄漏
@@ -243,7 +240,7 @@ public class ThreadLocal<T> {
 
 
 - 造成内存泄漏的前提：没有对ThreadlocalMap的Entry对象进行有效管理，这个线程还迟迟不结束（销毁）。<br>只要对Entry对象进行了有效的防内存泄漏管理，就不会出现内存泄漏；只要线程对象快速结束，就不会出现内存泄露。迟迟不结束的线程，最常见的是线程池里的线程。
-- 造成内存泄漏的直接原因是ThreadlocalMap的key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。![Threadlocal强引用关系](../images/threadlocal/reference-strong.jpg)
+- 造成内存泄漏的直接原因是ThreadlocalMap的key使用了Threadlocal的弱引用？答案是否定的！<br>造成内存泄漏与key是强引用还是弱引用没有直接关系。即使Key被设计成Threadlocal的强引用，也避免不了引起内存泄漏的可能性。当Threadlocal Ref由Threadlocal1指向Threadlocal2之后，Entry的key和value都有通过Thread Refr的可达性，如果Thread一直存活，那么key和value就一直不会被回收，造成内存泄漏。![Threadlocal强引用关系](/images/threadlocal/reference-strong.jpg)
 - 反而，使用ThreadLocal的弱引用作为key，是匠心之作。<br>再考虑上图中的情况，Threadlocal Ref由Threadlocal1指向Threadlocal2之后，事情已经变得不可控制了。用户已经拿不到Threadlocal1的引用，也便不能通过调用remove方法把自己从ThreadlocalMap中移除。而且，ThreadlocalMap想帮用户移除用Threadlocal1做key的Entry也不可能，因为遍历出来的Entry都没有特殊标记，不知道哪些有用，哪些没用。这个时候，Threadlocal1就必定是个内存泄漏，要想回收这部分内存，只能等线程结束，如果线程刚好是线程池里的线程，那就等OOM吧。<br>而把key设计成Threadlocal的弱引用后，在JVM的配合下，通过用户调用Threadlocal的get()或set()方法，或者往ThreadlocalMap存入新的变量副本时，ThreadlocalMap会探测到哪些Entry有用，哪些Entry没用，同时把没用的回收掉。<br>所以，用Threadlocal的弱引用来作为key是来帮助避免造成内存泄漏，而非促成内存泄漏。
 - 当然，使用ThreadLocal的弱引用作为key的这个设计在很大程度避免了内存泄漏，但不能完全避免内存泄漏。<br>实例1:[ThreadLocal & Memory Leak
 ](http://stackoverflow.com/questions/17968803/threadlocal-memory-leak)<br>实例2:[A ThreadLocal Memory Leak](https://blog.codecentric.de/en/2008/09/a-threadlocal-memory-leak/)
@@ -653,10 +650,10 @@ public class MyThreadlocal<S,T> {
 # 4. 结语
 - 有错误或有疑义的地方，欢迎批评指定，会持续更新改正。
 - 文中及其他一些测试代码地址：[JdkSourcecodeAnalysis-Threadlocal](https://github.com/oomeD/JdkSourcecodeAnalysis/tree/master/src/lang/threadlocal)
-- 参考文章：<br>
-[彻底理解ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)<br>
-[ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)<br>
+- 参考文章：
+[彻底理解ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)
+[ThreadLocal可能引起的内存泄露](http://www.cnblogs.com/onlywujun/p/3524675.html)
 [Java并发编程：深入剖析ThreadLocal](http://www.cnblogs.com/dolphin0520/p/3920407.html)
-[解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)<br>
-[Is it really my job to clean up ThreadLocal resources when classes have been exposed to a thread pool?](http://stackoverflow.com/questions/13852632/is-it-really-my-job-to-clean-up-threadlocal-resources-when-classes-have-been-exp)<br>  
+[解密ThreadLocal](http://qifuguang.me/2015/09/02/[Java%E5%B9%B6%E5%8F%91%E5%8C%85%E5%AD%A6%E4%B9%A0%E4%B8%83]%E8%A7%A3%E5%AF%86ThreadLocal/)
+[Is it really my job to clean up ThreadLocal resources when classes have been exposed to a thread pool?](http://stackoverflow.com/questions/13852632/is-it-really-my-job-to-clean-up-threadlocal-resources-when-classes-have-been-exp)
 [Why design ThreadLocalMap as static nest class in ThreadLocal?](http://stackoverflow.com/questions/34781183/why-design-threadlocalmap-as-static-nest-class-in-threadlocal)
