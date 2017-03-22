@@ -632,7 +632,9 @@ public class MyThreadlocal<S,T> {
  - 基本已经满足需求
  - 有点不顺眼的是，MyThread类的threadlocalmap定义成了Map&lt;Object,Object&gt;类型，可是没必要再给MyThread引入泛型，毕竟并不是每一个Thread都一定会有thread-local variables 。
  - 同样要注意对Map的管理，防止内存泄漏。
- - 这样让用户自己管理key（本地变量），可以只有一个全局的MyThreadlocal对象，MyThreadlocal变成了一个纯粹的工具类，但同时增加了用户对key的管理难度，不利于协同开发。
+ - 这样让用户自己管理key（本地变量），可以只有一个全局的MyThreadlocal对象，MyThreadlocal变成了一个纯粹的工具类，但同时增加了用户对key的管理难度，不利于协同开发，也有不安全因素。
+  > 这种方法的问题在于，这些字符串键代表了一个共享的全局命名空间。要使这种方法可行，客户端提供的字符串键必须是唯一的：如果两个客户端各自决定为它们的线程局部变量使用同样的名称，它们实际上就无意中共享了这个变量，这样往往会导致两个客户端都失败。而且，安全性也差。恶意客户端可能有意地使用也另一个客户端相同的键，以便非法地访问其他客户端的数据。---- Effective Java 中文版（第2版） 第50条：如果其他类型更适合，则尽量避免使用字符串  P195
+  > 永远不要让客户去做任何类库能够替客户完成的事情  ---- Effective Java 中文版（第2版） P47
 
 ## 3.2 Threadlocal设计
 - Threadlocal实现的关键点在于有currentThread()方法来获取当前线程。
