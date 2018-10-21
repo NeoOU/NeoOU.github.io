@@ -1,3 +1,65 @@
+# maven #
+target
+
+logs
+
+# windows #
+Thumbs.db
+
+# Mac #
+.DS_Store
+
+# Package Files #
+*.war
+*.ear
+
+plan.txt
+*.class
+
+# Package Files #
+*.jar
+
+*.bak
+*.tmp
+*.log
+
+.metadata
+Servers
+session_data
+
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### eclipse ###
+.settings
+.project
+.classpath
+.log
+.tern-project
+
 .DS_Store
 Thumbs.db
 *.log
