@@ -1,7 +1,7 @@
 ---
 title: Collections Framework -- overview
 category:
-- JDK源码
+- JDK Source Code
 - Collections Framework
 date: 2017/04/17
 ---
@@ -42,7 +42,7 @@ date: 2017/04/17
 - UnsupportedOperationException
 - ConcurrentModificationException
 
-### 1.2.4 Performace
+### 1.2.4 Performance
 - RandomAccess
 
 ## 1.3 Abstract implementations
@@ -215,7 +215,7 @@ all inherit from Collection
   - add(int index,E e)
   - remove(int index)
   - addAll(int index,Collection c)
-  - indexof(Object 0)
+  - indexOf(Object o)
   - lastIndexOf(Object o)
 - Iterators
   - listIterator()
