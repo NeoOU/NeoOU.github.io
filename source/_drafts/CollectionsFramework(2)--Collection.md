@@ -48,7 +48,7 @@ Collection接口的所有实现类都应当提供两个标准的构造方法
   可能抛NullPointerException异常。对于不允许null元素的集合，遵循optional-restrictions，如果o为null，可以选择抛NullPointerException异常，也可以选择直接返回false。
   - Iterator<E> iterator()
   继承自Iterable接口。返回集合的迭代器对象。
-  迭代器返回元素的顺序不一定是按元素顺序的。其中List、Deque、SortedSet子接口的实现类都按一定顺序返回元素，其余的实现类都不是。
+  迭代器返回元素的顺序不一定是按元素顺序的。其中List、Deque、NavigableSet子接口的实现类及LinkedHashSet类按一定顺序返回元素，其余的实现类都不是。
   
   
   
