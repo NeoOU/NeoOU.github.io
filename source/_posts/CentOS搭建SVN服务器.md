@@ -1,6 +1,8 @@
 ---
 title: CentOS搭建SVN服务器
-category: "tool"
+category:
+- linux
+- Operation & Maintenance
 date: 2016/11/20
 ---
 
