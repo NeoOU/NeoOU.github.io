@@ -44,7 +44,7 @@ Options:
   -U, --user-group              create a group with the same name as the user
   -Z, --selinux-user SEUSER     use a specific SEUSER for the SELinux user mapping
 ```
-
+<!--more-->
 ```linux
 [root@local ~]# usermod --help
 Usage: usermod [options] LOGIN

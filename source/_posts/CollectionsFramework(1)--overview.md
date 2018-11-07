@@ -10,6 +10,8 @@ date: 2017/04/17
 ![collection](/images/collections/collection.png)
 ![map](/images/collections/map.png)
 
+<!--more-->
+
 ## 1.1 Collection interfaces
 - Collection
 - Set
@@ -32,7 +34,6 @@ date: 2017/04/17
 - Iterable
 - Iterator
 - ListIterator
-<!--more-->
 
 ### 1.2.2 Ordering
 - Comparable

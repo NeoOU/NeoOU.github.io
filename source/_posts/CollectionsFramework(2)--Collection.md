@@ -1,5 +1,5 @@
 ---
-title: Collections Framework(2) -- Interface:Collection
+title: Collections Framework(2) -- Collection接口
 category:
 - JDK Source Code
 - Collections Framework
@@ -32,6 +32,7 @@ Collection接口所有实现类都实现序列化接口
 
 要注意处理和避免自引用。不管是直接自引用还是间接自引用，执行像clone()、equals()、hashCode()、toString()这些方法（递归遍历）时，都会出错。
 
+<!--more-->
 ### 构造方法<br>
 Collection接口的所有实现类都应当提供两个标准的构造方法
 - 无参的构造方法，生成空集合
