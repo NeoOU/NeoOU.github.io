@@ -246,6 +246,8 @@ statically from the source with nginx by using --with-pcre=<path> option.
 ```linux
 [eks@local pcre]$ wget https://ftp.pcre.org/pub/pcre/pcre-8.42.tar.gz
 [eks@local pcre]$ sudo ./configure
+[eks@local pcre]$ yum list | grep gcc        # 执行PCRE的configure时会检查gcc依赖，如果系统没有安装gcc，则需要安装
+[eks@local pcre]$ sudo yum install -y gcc
 [eks@local pcre]$ sudo make && sudo make install
 ```
 
