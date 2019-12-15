@@ -53,15 +53,8 @@ session_data
 /nbdist/
 /.nb-gradle/
 
-### eclipse ###
-.settings
-.project
-.classpath
 .log
 .tern-project
-
-.DS_Store
-Thumbs.db
-*.log
 public/
 .deploy*/
+.deploy_git
