@@ -1,0 +1,670 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Eks OU, java" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="下载12345678910111213141516[eks@local nginx]$ wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.tar.gz--2018-11-07 10:53:59--  https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS编译安装nginx">
+<meta property="og:url" content="localhost&#x2F;2018&#x2F;11&#x2F;07&#x2F;nginx-Compile&amp;Install&#x2F;index.html">
+<meta property="og:site_name" content="Eks OU">
+<meta property="og:description" content="下载12345678910111213141516[eks@local nginx]$ wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.tar.gz--2018-11-07 10:53:59--  https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="&#x2F;images&#x2F;nginx&#x2F;welcome.jpg">
+<meta property="article:published_time" content="2018-11-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-15T08:59:07.527Z">
+<meta property="article:author" content="Eks OU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="&#x2F;images&#x2F;nginx&#x2F;welcome.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="localhost/2018/11/07/nginx-Compile&Install/"/>
+
+
+
+
+
+  <title> CentOS编译安装nginx | Eks OU </title>
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Eks OU</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="localhost/2018/11/07/nginx-Compile&Install/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Eks OU">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/100.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Eks OU">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Eks OU" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CentOS编译安装nginx
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T00:00:00+08:00">
+                2018-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx]$ wget https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.tar.gz</span><br><span class="line">--2018-11-07 10:53:59--  https:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.1.tar.gz</span><br><span class="line">Resolving nginx.org (nginx.org)... 95.211.80.227, 206.251.255.63, 2606:7100:1:69::3f, ...</span><br><span class="line">Connecting to nginx.org (nginx.org)|95.211.80.227|:443... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 1014040 (990K) [application&#x2F;octet-stream]</span><br><span class="line">Saving to: ‘nginx-1.14.1.tar.gz’</span><br><span class="line"></span><br><span class="line">100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;] 1,014,040    687KB&#x2F;s   in 1.4s   </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[eks@local nginx]$ tar -xf nginx-1.14.1.tar.gz </span><br><span class="line">[eks@local nginx]$ ll</span><br><span class="line">total 996</span><br><span class="line">drwxr-xr-x 8 eks dev    4096 Nov  6 21:52 nginx-1.14.1</span><br><span class="line">-rw-r--r-- 1 eks dev 1014040 Nov  6 23:26 nginx-1.14.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx]$ cd nginx-1.14.1</span><br><span class="line">[eks@local nginx-1.14.1]$ ll</span><br><span class="line">total 748</span><br><span class="line">drwxr-xr-x 6 eks dev   4096 Nov  7 10:56 auto             # 用于获取系统编译环境及系统所能提供特性</span><br><span class="line">-rw-r--r-- 1 eks dev 287441 Nov  6 21:52 CHANGES          # 英文版changes</span><br><span class="line">-rw-r--r-- 1 eks dev 438114 Nov  6 21:52 CHANGES.ru       # 俄文版本changes</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 10:56 conf             # 配置示例。文件夹里的配置文件会拷贝到安装目录，成为默认配置 </span><br><span class="line">-rwxr-xr-x 1 eks dev   2502 Nov  6 21:52 configure        # 脚本文件，生成中间文件，为编译准备环境</span><br><span class="line">drwxr-xr-x 4 eks dev   4096 Nov  7 10:56 contrib          # 第三方贡献，包括geo2nginx.pl、unicode2nginx和vim高亮</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 10:56 html             # 包含默认的50X页面和index页面的html</span><br><span class="line">-rw-r--r-- 1 eks dev   1397 Nov  6 21:52 LICENSE          # BSD许可</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 10:56 man              # linux对nginx的帮助文件，用man指令打开</span><br><span class="line">-rw-r--r-- 1 eks dev     49 Nov  6 21:52 README           # readme</span><br><span class="line">drwxr-xr-x 9 eks dev   4096 Nov  7 10:56 src              # 源代码</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="vim的nginx代码高亮"><a href="#vim的nginx代码高亮" class="headerlink" title="vim的nginx代码高亮"></a>vim的nginx代码高亮</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ mkdir ~&#x2F;.vim &amp;&amp; cp -r contrib&#x2F;vim&#x2F;* &quot;$_&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="configure"><a href="#configure" class="headerlink" title="configure"></a>configure</h2><h3 id="参数选项"><a href="#参数选项" class="headerlink" title="参数选项"></a>参数选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ .&#x2F;configure --help</span><br><span class="line"></span><br><span class="line">  ## with-*_module表示将该模块编译进nginx，也就是说默认不会编译该模块</span><br><span class="line">  ## without-*_module表示不把该模块编译进nginx，也就是说默认会编译该模块</span><br><span class="line"></span><br><span class="line">  --help                             print this message</span><br><span class="line"></span><br><span class="line">  --prefix&#x3D;PATH                      set installation prefix</span><br><span class="line">  --sbin-path&#x3D;PATH                   set nginx binary pathname</span><br><span class="line">  --modules-path&#x3D;PATH                set modules path</span><br><span class="line">  --conf-path&#x3D;PATH                   set nginx.conf pathname</span><br><span class="line">  --error-log-path&#x3D;PATH              set error log pathname</span><br><span class="line">  --pid-path&#x3D;PATH                    set nginx.pid pathname</span><br><span class="line">  --lock-path&#x3D;PATH                   set nginx.lock pathname</span><br><span class="line"></span><br><span class="line">  --user&#x3D;USER                        set non-privileged user for</span><br><span class="line">                                     worker processes</span><br><span class="line">  --group&#x3D;GROUP                      set non-privileged group for</span><br><span class="line">                                     worker processes</span><br><span class="line"></span><br><span class="line">  --build&#x3D;NAME                       set build name</span><br><span class="line">  --builddir&#x3D;DIR                     set build directory</span><br><span class="line"></span><br><span class="line">  --with-select_module               enable select module</span><br><span class="line">  --without-select_module            disable select module</span><br><span class="line">  --with-poll_module                 enable poll module</span><br><span class="line">  --without-poll_module              disable poll module</span><br><span class="line"></span><br><span class="line">  --with-threads                     enable thread pool support</span><br><span class="line"></span><br><span class="line">  --with-file-aio                    enable file AIO support</span><br><span class="line"></span><br><span class="line">  --with-http_ssl_module             enable ngx_http_ssl_module</span><br><span class="line">  --with-http_v2_module              enable ngx_http_v2_module</span><br><span class="line">  --with-http_realip_module          enable ngx_http_realip_module</span><br><span class="line">  --with-http_addition_module        enable ngx_http_addition_module</span><br><span class="line">  --with-http_xslt_module            enable ngx_http_xslt_module</span><br><span class="line">  --with-http_xslt_module&#x3D;dynamic    enable dynamic ngx_http_xslt_module</span><br><span class="line">  --with-http_image_filter_module    enable ngx_http_image_filter_module</span><br><span class="line">  --with-http_image_filter_module&#x3D;dynamic</span><br><span class="line">                                     enable dynamic ngx_http_image_filter_module</span><br><span class="line">  --with-http_geoip_module           enable ngx_http_geoip_module</span><br><span class="line">  --with-http_geoip_module&#x3D;dynamic   enable dynamic ngx_http_geoip_module</span><br><span class="line">  --with-http_sub_module             enable ngx_http_sub_module</span><br><span class="line">  --with-http_dav_module             enable ngx_http_dav_module</span><br><span class="line">  --with-http_flv_module             enable ngx_http_flv_module</span><br><span class="line">  --with-http_mp4_module             enable ngx_http_mp4_module</span><br><span class="line">  --with-http_gunzip_module          enable ngx_http_gunzip_module</span><br><span class="line">  --with-http_gzip_static_module     enable ngx_http_gzip_static_module</span><br><span class="line">  --with-http_auth_request_module    enable ngx_http_auth_request_module</span><br><span class="line">  --with-http_random_index_module    enable ngx_http_random_index_module</span><br><span class="line">  --with-http_secure_link_module     enable ngx_http_secure_link_module</span><br><span class="line">  --with-http_degradation_module     enable ngx_http_degradation_module</span><br><span class="line">  --with-http_slice_module           enable ngx_http_slice_module</span><br><span class="line">  --with-http_stub_status_module     enable ngx_http_stub_status_module</span><br><span class="line"></span><br><span class="line">  --without-http_charset_module      disable ngx_http_charset_module</span><br><span class="line">  --without-http_gzip_module         disable ngx_http_gzip_module</span><br><span class="line">  --without-http_ssi_module          disable ngx_http_ssi_module</span><br><span class="line">  --without-http_userid_module       disable ngx_http_userid_module</span><br><span class="line">  --without-http_access_module       disable ngx_http_access_module</span><br><span class="line">  --without-http_auth_basic_module   disable ngx_http_auth_basic_module</span><br><span class="line">  --without-http_mirror_module       disable ngx_http_mirror_module</span><br><span class="line">  --without-http_autoindex_module    disable ngx_http_autoindex_module</span><br><span class="line">  --without-http_geo_module          disable ngx_http_geo_module</span><br><span class="line">  --without-http_map_module          disable ngx_http_map_module</span><br><span class="line">  --without-http_split_clients_module disable ngx_http_split_clients_module</span><br><span class="line">  --without-http_referer_module      disable ngx_http_referer_module</span><br><span class="line">  --without-http_rewrite_module      disable ngx_http_rewrite_module</span><br><span class="line">  --without-http_proxy_module        disable ngx_http_proxy_module</span><br><span class="line">  --without-http_fastcgi_module      disable ngx_http_fastcgi_module</span><br><span class="line">  --without-http_uwsgi_module        disable ngx_http_uwsgi_module</span><br><span class="line">  --without-http_scgi_module         disable ngx_http_scgi_module</span><br><span class="line">  --without-http_grpc_module         disable ngx_http_grpc_module</span><br><span class="line">  --without-http_memcached_module    disable ngx_http_memcached_module</span><br><span class="line">  --without-http_limit_conn_module   disable ngx_http_limit_conn_module</span><br><span class="line">  --without-http_limit_req_module    disable ngx_http_limit_req_module</span><br><span class="line">  --without-http_empty_gif_module    disable ngx_http_empty_gif_module</span><br><span class="line">  --without-http_browser_module      disable ngx_http_browser_module</span><br><span class="line">  --without-http_upstream_hash_module</span><br><span class="line">                                     disable ngx_http_upstream_hash_module</span><br><span class="line">  --without-http_upstream_ip_hash_module</span><br><span class="line">                                     disable ngx_http_upstream_ip_hash_module</span><br><span class="line">  --without-http_upstream_least_conn_module</span><br><span class="line">                                     disable ngx_http_upstream_least_conn_module</span><br><span class="line">  --without-http_upstream_keepalive_module</span><br><span class="line">                                     disable ngx_http_upstream_keepalive_module</span><br><span class="line">  --without-http_upstream_zone_module</span><br><span class="line">                                     disable ngx_http_upstream_zone_module</span><br><span class="line"></span><br><span class="line">  --with-http_perl_module            enable ngx_http_perl_module</span><br><span class="line">  --with-http_perl_module&#x3D;dynamic    enable dynamic ngx_http_perl_module</span><br><span class="line">  --with-perl_modules_path&#x3D;PATH      set Perl modules path</span><br><span class="line">  --with-perl&#x3D;PATH                   set perl binary pathname</span><br><span class="line"></span><br><span class="line">  --http-log-path&#x3D;PATH               set http access log pathname</span><br><span class="line">  --http-client-body-temp-path&#x3D;PATH  set path to store</span><br><span class="line">                                     http client request body temporary files</span><br><span class="line">  --http-proxy-temp-path&#x3D;PATH        set path to store</span><br><span class="line">                                     http proxy temporary files</span><br><span class="line">  --http-fastcgi-temp-path&#x3D;PATH      set path to store</span><br><span class="line">                                     http fastcgi temporary files</span><br><span class="line">  --http-uwsgi-temp-path&#x3D;PATH        set path to store</span><br><span class="line">                                     http uwsgi temporary files</span><br><span class="line">  --http-scgi-temp-path&#x3D;PATH         set path to store</span><br><span class="line">                                     http scgi temporary files</span><br><span class="line"></span><br><span class="line">  --without-http                     disable HTTP server</span><br><span class="line">  --without-http-cache               disable HTTP cache</span><br><span class="line"></span><br><span class="line">  --with-mail                        enable POP3&#x2F;IMAP4&#x2F;SMTP proxy module</span><br><span class="line">  --with-mail&#x3D;dynamic                enable dynamic POP3&#x2F;IMAP4&#x2F;SMTP proxy module</span><br><span class="line">  --with-mail_ssl_module             enable ngx_mail_ssl_module</span><br><span class="line">  --without-mail_pop3_module         disable ngx_mail_pop3_module</span><br><span class="line">  --without-mail_imap_module         disable ngx_mail_imap_module</span><br><span class="line">  --without-mail_smtp_module         disable ngx_mail_smtp_module</span><br><span class="line"></span><br><span class="line">  --with-stream                      enable TCP&#x2F;UDP proxy module</span><br><span class="line">  --with-stream&#x3D;dynamic              enable dynamic TCP&#x2F;UDP proxy module</span><br><span class="line">  --with-stream_ssl_module           enable ngx_stream_ssl_module</span><br><span class="line">  --with-stream_realip_module        enable ngx_stream_realip_module</span><br><span class="line">  --with-stream_geoip_module         enable ngx_stream_geoip_module</span><br><span class="line">  --with-stream_geoip_module&#x3D;dynamic enable dynamic ngx_stream_geoip_module</span><br><span class="line">  --with-stream_ssl_preread_module   enable ngx_stream_ssl_preread_module</span><br><span class="line">  --without-stream_limit_conn_module disable ngx_stream_limit_conn_module</span><br><span class="line">  --without-stream_access_module     disable ngx_stream_access_module</span><br><span class="line">  --without-stream_geo_module        disable ngx_stream_geo_module</span><br><span class="line">  --without-stream_map_module        disable ngx_stream_map_module</span><br><span class="line">  --without-stream_split_clients_module</span><br><span class="line">                                     disable ngx_stream_split_clients_module</span><br><span class="line">  --without-stream_return_module     disable ngx_stream_return_module</span><br><span class="line">  --without-stream_upstream_hash_module</span><br><span class="line">                                     disable ngx_stream_upstream_hash_module</span><br><span class="line">  --without-stream_upstream_least_conn_module</span><br><span class="line">                                     disable ngx_stream_upstream_least_conn_module</span><br><span class="line">  --without-stream_upstream_zone_module</span><br><span class="line">                                     disable ngx_stream_upstream_zone_module</span><br><span class="line"></span><br><span class="line">  --with-google_perftools_module     enable ngx_google_perftools_module</span><br><span class="line">  --with-cpp_test_module             enable ngx_cpp_test_module</span><br><span class="line"></span><br><span class="line">  --add-module&#x3D;PATH                  enable external module</span><br><span class="line">  --add-dynamic-module&#x3D;PATH          enable dynamic external module</span><br><span class="line"></span><br><span class="line">  --with-compat                      dynamic modules compatibility</span><br><span class="line"></span><br><span class="line">  --with-cc&#x3D;PATH                     set C compiler pathname</span><br><span class="line">  --with-cpp&#x3D;PATH                    set C preprocessor pathname</span><br><span class="line">  --with-cc-opt&#x3D;OPTIONS              set additional C compiler options</span><br><span class="line">  --with-ld-opt&#x3D;OPTIONS              set additional linker options</span><br><span class="line">  --with-cpu-opt&#x3D;CPU                 build for the specified CPU, valid values:</span><br><span class="line">                                     pentium, pentiumpro, pentium3, pentium4,</span><br><span class="line">                                     athlon, opteron, sparc32, sparc64, ppc64</span><br><span class="line"></span><br><span class="line">  --without-pcre                     disable PCRE library usage</span><br><span class="line">  --with-pcre                        force PCRE library usage</span><br><span class="line">  --with-pcre&#x3D;DIR                    set path to PCRE library sources</span><br><span class="line">  --with-pcre-opt&#x3D;OPTIONS            set additional build options for PCRE</span><br><span class="line">  --with-pcre-jit                    build PCRE with JIT compilation support</span><br><span class="line"></span><br><span class="line">  --with-zlib&#x3D;DIR                    set path to zlib library sources</span><br><span class="line">  --with-zlib-opt&#x3D;OPTIONS            set additional build options for zlib</span><br><span class="line">  --with-zlib-asm&#x3D;CPU                use zlib assembler sources optimized</span><br><span class="line">                                     for the specified CPU, valid values:</span><br><span class="line">                                     pentium, pentiumpro</span><br><span class="line"></span><br><span class="line">  --with-libatomic                   force libatomic_ops library usage</span><br><span class="line">  --with-libatomic&#x3D;DIR               set path to libatomic_ops library sources</span><br><span class="line"></span><br><span class="line">  --with-openssl&#x3D;DIR                 set path to OpenSSL library sources</span><br><span class="line">  --with-openssl-opt&#x3D;OPTIONS         set additional build options for OpenSSL</span><br><span class="line"></span><br><span class="line">  --with-debug                       enable debug logging</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装PCRE"><a href="#安装PCRE" class="headerlink" title="安装PCRE"></a>安装PCRE</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;nginx</span><br><span class="line"></span><br><span class="line">checking for PCRE library ... not found</span><br><span class="line">checking for PCRE library in &#x2F;usr&#x2F;local&#x2F; ... not found</span><br><span class="line">checking for PCRE library in &#x2F;usr&#x2F;include&#x2F;pcre&#x2F; ... not found</span><br><span class="line">checking for PCRE library in &#x2F;usr&#x2F;pkg&#x2F; ... not found</span><br><span class="line">checking for PCRE library in &#x2F;opt&#x2F;local&#x2F; ... not found</span><br><span class="line"></span><br><span class="line">.&#x2F;configure: error: the HTTP rewrite module requires the PCRE library.</span><br><span class="line">You can either disable the module by using --without-http_rewrite_module</span><br><span class="line">option, or install the PCRE library into the system, or build the PCRE library</span><br><span class="line">statically from the source with nginx by using --with-pcre&#x3D;&lt;path&gt; option.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[eks@local pcre]$ wget https:&#x2F;&#x2F;ftp.pcre.org&#x2F;pub&#x2F;pcre&#x2F;pcre-8.42.tar.gz</span><br><span class="line">[eks@local pcre]$ sudo .&#x2F;configure</span><br><span class="line">[eks@local pcre]$ yum list | grep gcc        # 执行PCRE的configure时会检查gcc依赖，如果系统没有安装gcc，则需要安装</span><br><span class="line">[eks@local pcre]$ sudo yum install -y gcc</span><br><span class="line">[eks@local pcre]$ sudo make &amp;&amp; sudo make install</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装zlib"><a href="#安装zlib" class="headerlink" title="安装zlib"></a>安装zlib</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;nginx</span><br><span class="line">checking for zlib library ... not found</span><br><span class="line"></span><br><span class="line">.&#x2F;configure: error: the HTTP gzip module requires the zlib library.</span><br><span class="line">You can either disable the module by using --without-http_gzip_module</span><br><span class="line">option, or install the zlib library into the system, or build the zlib library</span><br><span class="line">statically from the source with nginx by using --with-zlib&#x3D;&lt;path&gt; option.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ yum list |grep zlib*    </span><br><span class="line">zlib.x86_64                              1.2.7-17.el7                  @anaconda</span><br><span class="line">ghc-zlib.x86_64                          0.5.4.1-27.el7                epel     </span><br><span class="line">ghc-zlib-devel.x86_64                    0.5.4.1-27.el7                epel     </span><br><span class="line">jzlib.noarch                             1.1.1-6.el7                   base     </span><br><span class="line">jzlib-demo.noarch                        1.1.1-6.el7                   base     </span><br><span class="line">jzlib-javadoc.noarch                     1.1.1-6.el7                   base     </span><br><span class="line">mingw32-zlib.noarch                      1.2.8-2.el7                   epel     </span><br><span class="line">mingw32-zlib-static.noarch               1.2.8-2.el7                   epel     </span><br><span class="line">mingw64-zlib.noarch                      1.2.8-2.el7                   epel     </span><br><span class="line">mingw64-zlib-static.noarch               1.2.8-2.el7                   epel     </span><br><span class="line">zlib.i686                                1.2.7-17.el7                  base     </span><br><span class="line">zlib-ada.x86_64                          1.4-0.5.20120830CVS.el7       epel     </span><br><span class="line">zlib-ada-devel.x86_64                    1.4-0.5.20120830CVS.el7       epel     </span><br><span class="line">zlib-devel.i686                          1.2.7-17.el7                  base     </span><br><span class="line">zlib-devel.x86_64                        1.2.7-17.el7                  base     </span><br><span class="line">zlib-static.i686                         1.2.7-17.el7                  base     </span><br><span class="line">zlib-static.x86_64                       1.2.7-17.el7                  base  </span><br><span class="line">   </span><br><span class="line">[eks@local nginx-1.14.1]$ sudo yum install -y zlib-devel</span><br><span class="line">Loaded plugins: fastestmirror</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line">Resolving Dependencies</span><br><span class="line">--&gt; Running transaction check</span><br><span class="line">---&gt; Package zlib-devel.x86_64 0:1.2.7-17.el7 will be installed</span><br><span class="line">--&gt; Finished Dependency Resolution</span><br><span class="line"></span><br><span class="line">Dependencies Resolved</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line"> Package               Arch              Version                    Repository       Size</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Installing:</span><br><span class="line"> zlib-devel            x86_64            1.2.7-17.el7               base             50 k</span><br><span class="line"></span><br><span class="line">Transaction Summary</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Install  1 Package</span><br><span class="line"></span><br><span class="line">Total download size: 50 k</span><br><span class="line">Installed size: 132 k</span><br><span class="line">Downloading packages:</span><br><span class="line">zlib-devel-1.2.7-17.el7.x86_64.rpm                                 |  50 kB  00:00:00     </span><br><span class="line">Running transaction check</span><br><span class="line">Running transaction test</span><br><span class="line">Transaction test succeeded</span><br><span class="line">Running transaction</span><br><span class="line">  Installing : zlib-devel-1.2.7-17.el7.x86_64                                         1&#x2F;1 </span><br><span class="line">  Verifying  : zlib-devel-1.2.7-17.el7.x86_64                                         1&#x2F;1 </span><br><span class="line"></span><br><span class="line">Installed:</span><br><span class="line">  zlib-devel.x86_64 0:1.2.7-17.el7                                                        </span><br><span class="line"></span><br><span class="line">Complete!</span><br></pre></td></tr></table></figure>
+
+<h3 id="configure-success"><a href="#configure-success" class="headerlink" title="configure success"></a>configure success</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;nginx</span><br><span class="line"></span><br><span class="line">Configuration summary</span><br><span class="line">  + using system PCRE library</span><br><span class="line">  + OpenSSL library is not used</span><br><span class="line">  + using system zlib library</span><br><span class="line"></span><br><span class="line">  nginx path prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&quot;</span><br><span class="line">  nginx binary file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&quot;</span><br><span class="line">  nginx modules path: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;modules&quot;</span><br><span class="line">  nginx configuration prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&quot;</span><br><span class="line">  nginx configuration file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf&quot;</span><br><span class="line">  nginx pid file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;nginx.pid&quot;</span><br><span class="line">  nginx error log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;error.log&quot;</span><br><span class="line">  nginx http access log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;access.log&quot;</span><br><span class="line">  nginx http client request body temporary files: &quot;client_body_temp&quot;</span><br><span class="line">  nginx http proxy temporary files: &quot;proxy_temp&quot;</span><br><span class="line">  nginx http fastcgi temporary files: &quot;fastcgi_temp&quot;</span><br><span class="line">  nginx http uwsgi temporary files: &quot;uwsgi_temp&quot;</span><br><span class="line">  nginx http scgi temporary files: &quot;scgi_temp&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ ll</span><br><span class="line">total 756</span><br><span class="line">-rw-r--r-- 1 eks dev      0 Nov  7 10:57 ]</span><br><span class="line">drwxr-xr-x 6 eks dev   4096 Nov  7 10:56 auto</span><br><span class="line">-rw-r--r-- 1 eks dev 287441 Nov  6 21:52 CHANGES</span><br><span class="line">-rw-r--r-- 1 eks dev 438114 Nov  6 21:52 CHANGES.ru</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 13:05 conf</span><br><span class="line">-rwxr-xr-x 1 eks dev   2502 Nov  6 21:52 configure</span><br><span class="line">drwxr-xr-x 4 eks dev   4096 Nov  7 10:56 contrib</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 10:56 html</span><br><span class="line">-rw-r--r-- 1 eks dev   1397 Nov  6 21:52 LICENSE</span><br><span class="line">-rw-r--r-- 1 eks dev    376 Nov  7 19:07 Makefile      ## configure成功后新增的Makefile文件</span><br><span class="line">drwxr-xr-x 2 eks dev   4096 Nov  7 10:56 man</span><br><span class="line">drwxr-xr-x 3 eks dev   4096 Nov  7 19:11 objs          ## configure成功后新增的中间文件</span><br><span class="line">-rw-r--r-- 1 eks dev     49 Nov  6 21:52 README</span><br><span class="line">drwxr-xr-x 9 eks dev   4096 Nov  7 10:56 src</span><br><span class="line"></span><br><span class="line">[eks@local nginx-1.14.1]$ cd objs&#x2F;</span><br><span class="line">[eks@local objs]$ ll</span><br><span class="line">total 84</span><br><span class="line">-rw-r--r-- 1 eks dev 17763 Nov  7 19:11 autoconf.err</span><br><span class="line">-rw-r--r-- 1 eks dev 39478 Nov  7 19:11 Makefile</span><br><span class="line">-rw-r--r-- 1 eks dev  6804 Nov  7 19:11 ngx_auto_config.h</span><br><span class="line">-rw-r--r-- 1 eks dev   657 Nov  7 19:11 ngx_auto_headers.h</span><br><span class="line">-rw-r--r-- 1 eks dev  5725 Nov  7 19:11 ngx_modules.c       ## 确定执行编译时，哪些模块会编译进nginx</span><br><span class="line">drwxr-xr-x 9 eks dev  4096 Nov  7 19:11 src                 ## 源码</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[eks@local objs]$ vim ngx_modules.c </span><br><span class="line"></span><br><span class="line">#include &lt;ngx_config.h&gt;</span><br><span class="line">#include &lt;ngx_core.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">extern ngx_module_t  ngx_core_module;</span><br><span class="line">extern ngx_module_t  ngx_errlog_module;</span><br><span class="line">extern ngx_module_t  ngx_conf_module;</span><br><span class="line">extern ngx_module_t  ngx_regex_module;</span><br><span class="line">extern ngx_module_t  ngx_events_module;</span><br><span class="line">extern ngx_module_t  ngx_event_core_module;</span><br><span class="line">extern ngx_module_t  ngx_epoll_module;</span><br><span class="line">extern ngx_module_t  ngx_http_module;</span><br><span class="line">extern ngx_module_t  ngx_http_core_module;</span><br><span class="line">extern ngx_module_t  ngx_http_log_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_module;</span><br><span class="line">extern ngx_module_t  ngx_http_static_module;</span><br><span class="line">extern ngx_module_t  ngx_http_autoindex_module;</span><br><span class="line">extern ngx_module_t  ngx_http_index_module;</span><br><span class="line">extern ngx_module_t  ngx_http_mirror_module;</span><br><span class="line">extern ngx_module_t  ngx_http_try_files_module;</span><br><span class="line">extern ngx_module_t  ngx_http_auth_basic_module;</span><br><span class="line">extern ngx_module_t  ngx_http_access_module;</span><br><span class="line">extern ngx_module_t  ngx_http_limit_conn_module;</span><br><span class="line">extern ngx_module_t  ngx_http_limit_req_module;</span><br><span class="line">extern ngx_module_t  ngx_http_geo_module;</span><br><span class="line">extern ngx_module_t  ngx_http_map_module;</span><br><span class="line">extern ngx_module_t  ngx_http_split_clients_module;</span><br><span class="line">extern ngx_module_t  ngx_http_referer_module;</span><br><span class="line">extern ngx_module_t  ngx_http_rewrite_module;</span><br><span class="line">extern ngx_module_t  ngx_http_proxy_module;</span><br><span class="line">extern ngx_module_t  ngx_http_fastcgi_module;</span><br><span class="line">extern ngx_module_t  ngx_http_uwsgi_module;</span><br><span class="line">extern ngx_module_t  ngx_http_scgi_module;</span><br><span class="line">extern ngx_module_t  ngx_http_memcached_module;</span><br><span class="line">extern ngx_module_t  ngx_http_empty_gif_module;</span><br><span class="line">extern ngx_module_t  ngx_http_browser_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_hash_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_ip_hash_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_least_conn_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_keepalive_module;</span><br><span class="line">extern ngx_module_t  ngx_http_upstream_zone_module;</span><br><span class="line">extern ngx_module_t  ngx_http_write_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_header_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_chunked_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_range_header_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_gzip_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_postpone_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_ssi_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_charset_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_userid_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_headers_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_copy_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_range_body_filter_module;</span><br><span class="line">extern ngx_module_t  ngx_http_not_modified_filter_module;</span><br><span class="line"></span><br><span class="line">ngx_module_t *ngx_modules[] &#x3D; &#123;</span><br><span class="line">    &amp;ngx_core_module,</span><br><span class="line">    &amp;ngx_errlog_module,</span><br><span class="line">    &amp;ngx_conf_module,</span><br><span class="line">    &amp;ngx_regex_module,</span><br><span class="line">    &amp;ngx_events_module,</span><br><span class="line">    &amp;ngx_event_core_module,</span><br><span class="line">    &amp;ngx_epoll_module,</span><br><span class="line">    &amp;ngx_http_module,</span><br><span class="line">    &amp;ngx_http_core_module,</span><br><span class="line">    &amp;ngx_http_log_module,</span><br><span class="line">    &amp;ngx_http_upstream_module,</span><br><span class="line">    &amp;ngx_http_static_module,</span><br><span class="line">    &amp;ngx_http_autoindex_module,</span><br><span class="line">    &amp;ngx_http_index_module,</span><br><span class="line">    &amp;ngx_http_mirror_module,</span><br><span class="line">    &amp;ngx_http_try_files_module,</span><br><span class="line">    &amp;ngx_http_auth_basic_module,</span><br><span class="line">    &amp;ngx_http_access_module,</span><br><span class="line">    &amp;ngx_http_limit_conn_module,</span><br><span class="line">    &amp;ngx_http_limit_req_module,</span><br><span class="line">    &amp;ngx_http_geo_module,</span><br><span class="line">    &amp;ngx_http_map_module,</span><br><span class="line">    &amp;ngx_http_split_clients_module,</span><br><span class="line">    &amp;ngx_http_referer_module,</span><br><span class="line">    &amp;ngx_http_rewrite_module,</span><br><span class="line">    &amp;ngx_http_proxy_module,</span><br><span class="line">    &amp;ngx_http_fastcgi_module,</span><br><span class="line">    &amp;ngx_http_uwsgi_module,</span><br><span class="line">    &amp;ngx_http_scgi_module,</span><br><span class="line">    &amp;ngx_http_memcached_module,</span><br><span class="line">    &amp;ngx_http_empty_gif_module,</span><br><span class="line">    &amp;ngx_http_browser_module,</span><br><span class="line">    &amp;ngx_http_upstream_hash_module,</span><br><span class="line">    &amp;ngx_http_upstream_ip_hash_module,</span><br><span class="line">    &amp;ngx_http_upstream_least_conn_module,</span><br><span class="line">    &amp;ngx_http_upstream_keepalive_module,</span><br><span class="line">    &amp;ngx_http_upstream_zone_module,</span><br><span class="line">    &amp;ngx_http_write_filter_module,</span><br><span class="line">    &amp;ngx_http_header_filter_module,</span><br><span class="line">    &amp;ngx_http_chunked_filter_module,</span><br><span class="line">    &amp;ngx_http_range_header_filter_module,</span><br><span class="line">    &amp;ngx_http_gzip_filter_module,</span><br><span class="line">    &amp;ngx_http_postpone_filter_module,</span><br><span class="line">    &amp;ngx_http_ssi_filter_module,</span><br><span class="line">    &amp;ngx_http_charset_filter_module,</span><br><span class="line">    &amp;ngx_http_userid_filter_module,</span><br><span class="line">    &amp;ngx_http_headers_filter_module,</span><br><span class="line">    &amp;ngx_http_copy_filter_module,</span><br><span class="line">    &amp;ngx_http_range_body_filter_module,</span><br><span class="line">    &amp;ngx_http_not_modified_filter_module,</span><br><span class="line">    NULL</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">char *ngx_module_names[] &#x3D; &#123;</span><br><span class="line">    &quot;ngx_core_module&quot;,</span><br><span class="line">    &quot;ngx_errlog_module&quot;,</span><br><span class="line">    &quot;ngx_conf_module&quot;,</span><br><span class="line">    &quot;ngx_regex_module&quot;,</span><br><span class="line">    &quot;ngx_events_module&quot;,</span><br><span class="line">    &quot;ngx_event_core_module&quot;,</span><br><span class="line">    &quot;ngx_epoll_module&quot;,</span><br><span class="line">    &quot;ngx_http_module&quot;,</span><br><span class="line">    &quot;ngx_http_core_module&quot;,</span><br><span class="line">    &quot;ngx_http_log_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_module&quot;,</span><br><span class="line">    &quot;ngx_http_static_module&quot;,</span><br><span class="line">    &quot;ngx_http_autoindex_module&quot;,</span><br><span class="line">    &quot;ngx_http_index_module&quot;,</span><br><span class="line">    &quot;ngx_http_mirror_module&quot;,</span><br><span class="line">    &quot;ngx_http_try_files_module&quot;,</span><br><span class="line">    &quot;ngx_http_auth_basic_module&quot;,</span><br><span class="line">    &quot;ngx_http_access_module&quot;,</span><br><span class="line">    &quot;ngx_http_limit_conn_module&quot;,</span><br><span class="line">    &quot;ngx_http_limit_req_module&quot;,</span><br><span class="line">    &quot;ngx_http_geo_module&quot;,</span><br><span class="line">    &quot;ngx_http_map_module&quot;,</span><br><span class="line">    &quot;ngx_http_split_clients_module&quot;,</span><br><span class="line">    &quot;ngx_http_referer_module&quot;,</span><br><span class="line">    &quot;ngx_http_rewrite_module&quot;,</span><br><span class="line">    &quot;ngx_http_proxy_module&quot;,</span><br><span class="line">    &quot;ngx_http_fastcgi_module&quot;,</span><br><span class="line">    &quot;ngx_http_uwsgi_module&quot;,</span><br><span class="line">    &quot;ngx_http_scgi_module&quot;,</span><br><span class="line">    &quot;ngx_http_memcached_module&quot;,</span><br><span class="line">    &quot;ngx_http_empty_gif_module&quot;,</span><br><span class="line">    &quot;ngx_http_browser_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_hash_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_ip_hash_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_least_conn_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_keepalive_module&quot;,</span><br><span class="line">    &quot;ngx_http_upstream_zone_module&quot;,</span><br><span class="line">    &quot;ngx_http_write_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_header_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_chunked_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_range_header_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_gzip_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_postpone_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_ssi_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_charset_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_userid_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_headers_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_copy_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_range_body_filter_module&quot;,</span><br><span class="line">    &quot;ngx_http_not_modified_filter_module&quot;,</span><br><span class="line">    NULL</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="make-and-install"><a href="#make-and-install" class="headerlink" title="make and install"></a>make and install</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">[eks@local nginx-1.14.1]$ sudo make &amp;&amp; sudo make install</span><br><span class="line">[sudo] password for eks: </span><br><span class="line">make -f objs&#x2F;Makefile</span><br><span class="line">make[1]: Entering directory &#96;&#x2F;home&#x2F;eks&#x2F;nginx&#x2F;nginx-1.14.1&#39;</span><br><span class="line">make[1]: Nothing to be done for &#96;build&#39;.</span><br><span class="line">make[1]: Leaving directory &#96;&#x2F;home&#x2F;eks&#x2F;nginx&#x2F;nginx-1.14.1&#39;</span><br><span class="line">make -f objs&#x2F;Makefile install</span><br><span class="line">make[1]: Entering directory &#96;&#x2F;home&#x2F;eks&#x2F;nginx&#x2F;nginx-1.14.1&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#39; || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#39; \</span><br><span class="line">        || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#39;</span><br><span class="line">test ! -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&#39; \</span><br><span class="line">        || mv &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&#39; \</span><br><span class="line">                &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx.old&#39;</span><br><span class="line">cp objs&#x2F;nginx &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39; \</span><br><span class="line">        || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;koi-win &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;koi-utf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;win-utf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;mime.types&#39; \</span><br><span class="line">        || cp conf&#x2F;mime.types &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;mime.types &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;mime.types.default&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;fastcgi_params&#39; \</span><br><span class="line">        || cp conf&#x2F;fastcgi_params &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;fastcgi_params \</span><br><span class="line">        &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;fastcgi_params.default&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;fastcgi.conf&#39; \</span><br><span class="line">        || cp conf&#x2F;fastcgi.conf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;fastcgi.conf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;fastcgi.conf.default&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;uwsgi_params&#39; \</span><br><span class="line">        || cp conf&#x2F;uwsgi_params &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;uwsgi_params \</span><br><span class="line">        &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;uwsgi_params.default&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;scgi_params&#39; \</span><br><span class="line">        || cp conf&#x2F;scgi_params &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#39;</span><br><span class="line">cp conf&#x2F;scgi_params \</span><br><span class="line">        &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;scgi_params.default&#39;</span><br><span class="line">test -f &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf&#39; \</span><br><span class="line">        || cp conf&#x2F;nginx.conf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf&#39;</span><br><span class="line">cp conf&#x2F;nginx.conf &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf.default&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39; \</span><br><span class="line">        || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39; \</span><br><span class="line">        || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;html&#39; \</span><br><span class="line">        || cp -R html &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#39;</span><br><span class="line">test -d &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39; \</span><br><span class="line">        || mkdir -p &#39;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#39;</span><br><span class="line">make[1]: Leaving directory &#96;&#x2F;home&#x2F;eks&#x2F;nginx&#x2F;nginx-1.14.1&#39;</span><br><span class="line"></span><br><span class="line">[eks@local nginx]$ cd &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;</span><br><span class="line">[eks@local nginx]$ ll</span><br><span class="line">total 16</span><br><span class="line">drwxr-xr-x 2 root root 4096 Nov  7 19:11 conf    ## 配置文件夹</span><br><span class="line">drwxr-xr-x 2 root root 4096 Nov  7 19:11 html    ## 默认index页面和默认50X页面</span><br><span class="line">drwxr-xr-x 2 root root 4096 Nov  7 19:11 logs    ## access.log和error.log所在文件夹</span><br><span class="line">drwxr-xr-x 2 root root 4096 Nov  7 19:11 sbin    ## 最主要二进制文件所在文件夹，</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><h3 id="参数选项-1"><a href="#参数选项-1" class="headerlink" title="参数选项"></a>参数选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[eks@local sbin]$ .&#x2F;nginx -h</span><br><span class="line">nginx version: nginx&#x2F;1.14.1</span><br><span class="line">Usage: nginx [-?hvVtTq] [-s signal] [-c filename] [-p prefix] [-g directives]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -?,-h         : this help</span><br><span class="line">  -v            : show version and exit</span><br><span class="line">  -V            : show version and configure options then exit</span><br><span class="line">  -t            : test configuration and exit</span><br><span class="line">  -T            : test configuration, dump it and exit</span><br><span class="line">  -q            : suppress non-error messages during configuration testing</span><br><span class="line">  -s signal     : send signal to a master process: stop, quit, reopen, reload</span><br><span class="line">  -p prefix     : set prefix path (default: &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;)</span><br><span class="line">  -c filename   : set configuration file (default: conf&#x2F;nginx.conf)</span><br><span class="line">  -g directives : set global directives out of configuration file</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[eks@local sbin]$ sudo .&#x2F;nginx -t</span><br><span class="line">[sudo] password for eks: </span><br><span class="line">nginx: the configuration file &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf test is successful</span><br><span class="line"></span><br><span class="line">[eks@local sbin]$ sudo .&#x2F;nginx</span><br><span class="line">[sudo] password for eks: </span><br><span class="line">[eks@local sbin]$ ps aux | grep nginx</span><br><span class="line">root     12247  0.0  0.0  20500   612 ?        Ss   19:49   0:00 nginx: master process .&#x2F;nginx</span><br><span class="line">nobody   12248  0.0  0.0  20944  1340 ?        S    19:49   0:00 nginx: worker process</span><br><span class="line">eks      12256  0.0  0.0 112660   968 pts&#x2F;0    R+   19:49   0:00 grep --color&#x3D;auto nginx</span><br><span class="line"></span><br><span class="line">[eks@local sbin]$ cd ..</span><br><span class="line">[eks@local nginx]$ ll</span><br><span class="line">total 36</span><br><span class="line">drwx------ 2 nobody root 4096 Nov  7 19:43 client_body_temp</span><br><span class="line">drwxr-xr-x 2 root   root 4096 Nov  7 19:11 conf</span><br><span class="line">drwx------ 2 nobody root 4096 Nov  7 19:43 fastcgi_temp</span><br><span class="line">drwxr-xr-x 2 root   root 4096 Nov  7 19:11 html</span><br><span class="line">drwxr-xr-x 2 root   root 4096 Nov  7 19:43 logs</span><br><span class="line">drwx------ 2 nobody root 4096 Nov  7 19:43 proxy_temp</span><br><span class="line">drwxr-xr-x 2 root   root 4096 Nov  7 19:11 sbin</span><br><span class="line">drwx------ 2 nobody root 4096 Nov  7 19:43 scgi_temp</span><br><span class="line">drwx------ 2 nobody root 4096 Nov  7 19:43 uwsgi_temp</span><br><span class="line"></span><br><span class="line">[eks@local nginx]$ cd logs&#x2F;</span><br><span class="line">[eks@local logs]$ ll</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 1 root root 0 Nov  7 19:43 access.log</span><br><span class="line">-rw-r--r-- 1 root root 0 Nov  7 19:43 error.log</span><br><span class="line">-rw-r--r-- 1 root root 6 Nov  7 19:49 nginx.pid</span><br><span class="line"></span><br><span class="line"># 文件位置均已在configure时配置</span><br><span class="line"># Configuration summary</span><br><span class="line">#   + using system PCRE library</span><br><span class="line">#   + OpenSSL library is not used</span><br><span class="line">#   + using system zlib library</span><br><span class="line"># </span><br><span class="line">#   nginx path prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&quot;</span><br><span class="line">#   nginx binary file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx&quot;</span><br><span class="line">#   nginx modules path: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;modules&quot;</span><br><span class="line">#   nginx configuration prefix: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&quot;</span><br><span class="line">#   nginx configuration file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf&quot;</span><br><span class="line">#   nginx pid file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;nginx.pid&quot;</span><br><span class="line">#   nginx error log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;error.log&quot;</span><br><span class="line">#   nginx http access log file: &quot;&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;access.log&quot;</span><br><span class="line">#   nginx http client request body temporary files: &quot;client_body_temp&quot;</span><br><span class="line">#   nginx http proxy temporary files: &quot;proxy_temp&quot;</span><br><span class="line">#   nginx http fastcgi temporary files: &quot;fastcgi_temp&quot;</span><br><span class="line">#   nginx http uwsgi temporary files: &quot;uwsgi_temp&quot;</span><br><span class="line">#   nginx http scgi temporary files: &quot;scgi_temp&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/nginx/welcome.jpg" alt="welcome"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/06/linux-UserManagement/" rel="next" title="CentOS用户管理">
+                <i class="fa fa-chevron-left"></i> CentOS用户管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/100.jpg"
+               alt="Eks OU" />
+          <p class="site-author-name" itemprop="name">Eks OU</p>
+          <p class="site-description motion-element" itemprop="description">2018关键字：坚持！！！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives/">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EksOU" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录结构"><span class="nav-number">2.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vim的nginx代码高亮"><span class="nav-number">3.</span> <span class="nav-text">vim的nginx代码高亮</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#configure"><span class="nav-number">4.</span> <span class="nav-text">configure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数选项"><span class="nav-number">4.1.</span> <span class="nav-text">参数选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装PCRE"><span class="nav-number">4.2.</span> <span class="nav-text">安装PCRE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装zlib"><span class="nav-number">4.3.</span> <span class="nav-text">安装zlib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#configure-success"><span class="nav-number">4.4.</span> <span class="nav-text">configure success</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make-and-install"><span class="nav-number">5.</span> <span class="nav-text">make and install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动nginx"><span class="nav-number">6.</span> <span class="nav-text">启动nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数选项-1"><span class="nav-number">6.1.</span> <span class="nav-text">参数选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">6.2.</span> <span class="nav-text">启动</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eks OU</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

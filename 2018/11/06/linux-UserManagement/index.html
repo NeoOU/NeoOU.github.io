@@ -1,0 +1,672 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Eks OU, java" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="指令1234567891011121314151617181920212223242526272829303132333435[root@local ~]# useradd --helpUsage: useradd [options] LOGIN        useradd -D       useradd -D [options]Options:  -b, --base-dir BASE_DI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS用户管理">
+<meta property="og:url" content="localhost&#x2F;2018&#x2F;11&#x2F;06&#x2F;linux-UserManagement&#x2F;index.html">
+<meta property="og:site_name" content="Eks OU">
+<meta property="og:description" content="指令1234567891011121314151617181920212223242526272829303132333435[root@local ~]# useradd --helpUsage: useradd [options] LOGIN        useradd -D       useradd -D [options]Options:  -b, --base-dir BASE_DI">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-15T08:59:07.527Z">
+<meta property="article:author" content="Eks OU">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="localhost/2018/11/06/linux-UserManagement/"/>
+
+
+
+
+
+  <title> CentOS用户管理 | Eks OU </title>
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Eks OU</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="localhost/2018/11/06/linux-UserManagement/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Eks OU">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/100.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Eks OU">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Eks OU" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CentOS用户管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T00:00:00+08:00">
+                2018-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/Operation-Maintenance/" itemprop="url" rel="index">
+                    <span itemprop="name">Operation & Maintenance</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# useradd --help</span><br><span class="line">Usage: useradd [options] LOGIN </span><br><span class="line">       useradd -D</span><br><span class="line">       useradd -D [options]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -b, --base-dir BASE_DIR       base directory for the home directory of the</span><br><span class="line">                                new account</span><br><span class="line">  -c, --comment COMMENT         GECOS field of the new account</span><br><span class="line">  -d, --home-dir HOME_DIR       home directory of the new account</span><br><span class="line">  -D, --defaults                print or change default useradd configuration</span><br><span class="line">  -e, --expiredate EXPIRE_DATE  expiration date of the new account</span><br><span class="line">  -f, --inactive INACTIVE       password inactivity period of the new account</span><br><span class="line">  -g, --gid GROUP               name or ID of the primary group of the new</span><br><span class="line">                                account</span><br><span class="line">  -G, --groups GROUPS           list of supplementary groups of the new</span><br><span class="line">                                account</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -k, --skel SKEL_DIR           use this alternative skeleton directory</span><br><span class="line">  -K, --key KEY&#x3D;VALUE           override &#x2F;etc&#x2F;login.defs defaults</span><br><span class="line">  -l, --no-log-init             do not add the user to the lastlog and</span><br><span class="line">                                faillog databases</span><br><span class="line">  -m, --create-home             create the user&#39;s home directory</span><br><span class="line">  -M, --no-create-home          do not create the user&#39;s home directory</span><br><span class="line">  -N, --no-user-group           do not create a group with the same name as</span><br><span class="line">                                the user</span><br><span class="line">  -o, --non-unique              allow to create users with duplicate</span><br><span class="line">                                (non-unique) UID</span><br><span class="line">  -p, --password PASSWORD       encrypted password of the new account</span><br><span class="line">  -r, --system                  create a system account</span><br><span class="line">  -R, --root CHROOT_DIR         directory to chroot into</span><br><span class="line">  -s, --shell SHELL             login shell of the new account</span><br><span class="line">  -u, --uid UID                 user ID of the new account</span><br><span class="line">  -U, --user-group              create a group with the same name as the user</span><br><span class="line">  -Z, --selinux-user SEUSER     use a specific SEUSER for the SELinux user mapping</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# usermod --help</span><br><span class="line">Usage: usermod [options] LOGIN</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -c, --comment COMMENT         new value of the GECOS field</span><br><span class="line">  -d, --home HOME_DIR           new home directory for the user account</span><br><span class="line">  -e, --expiredate EXPIRE_DATE  set account expiration date to EXPIRE_DATE</span><br><span class="line">  -f, --inactive INACTIVE       set password inactive after expiration</span><br><span class="line">                                to INACTIVE</span><br><span class="line">  -g, --gid GROUP               force use GROUP as new primary group</span><br><span class="line">  -G, --groups GROUPS           new list of supplementary GROUPS</span><br><span class="line">  -a, --append                  append the user to the supplemental GROUPS</span><br><span class="line">                                mentioned by the -G option without removing</span><br><span class="line">                                him&#x2F;her from other groups</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -l, --login NEW_LOGIN         new value of the login name</span><br><span class="line">  -L, --lock                    lock the user account</span><br><span class="line">  -m, --move-home               move contents of the home directory to the</span><br><span class="line">                                new location (use only with -d)</span><br><span class="line">  -o, --non-unique              allow using duplicate (non-unique) UID</span><br><span class="line">  -p, --password PASSWORD       use encrypted password for the new password</span><br><span class="line">  -R, --root CHROOT_DIR         directory to chroot into</span><br><span class="line">  -s, --shell SHELL             new login shell for the user account</span><br><span class="line">  -u, --uid UID                 new UID for the user account</span><br><span class="line">  -U, --unlock                  unlock the user account</span><br><span class="line">  -Z, --selinux-user SEUSER     new SELinux user mapping for the user account</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# userdel --help</span><br><span class="line">Usage: userdel [options] LOGIN</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -f, --force                   force some actions that would fail otherwise</span><br><span class="line">                                e.g. removal of user still logged in</span><br><span class="line">                                or files, even if not owned by the user</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -r, --remove                  remove home directory and mail spool</span><br><span class="line">  -R, --root CHROOT_DIR         directory to chroot into</span><br><span class="line">  -Z, --selinux-user            remove any SELinux user mapping for the user</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# groupadd --help</span><br><span class="line">Usage: groupadd [options] GROUP</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -f, --force                   exit successfully if the group already exists,</span><br><span class="line">                                and cancel -g if the GID is already used</span><br><span class="line">  -g, --gid GID                 use GID for the new group</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -K, --key KEY&#x3D;VALUE           override &#x2F;etc&#x2F;login.defs defaults</span><br><span class="line">  -o, --non-unique              allow to create groups with duplicate</span><br><span class="line">                                (non-unique) GID</span><br><span class="line">  -p, --password PASSWORD       use this encrypted password for the new group</span><br><span class="line">  -r, --system                  create a system account</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# groupmod --help</span><br><span class="line">Usage: groupmod [options] GROUP</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -g, --gid GID                 change the group ID to GID</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -n, --new-name NEW_GROUP      change the name to NEW_GROUP</span><br><span class="line">  -o, --non-unique              allow to use a duplicate (non-unique) GID</span><br><span class="line">  -p, --password PASSWORD       change the password to this (encrypted)</span><br><span class="line">                                PASSWORD</span><br><span class="line">  -R, --root CHROOT_DIR         directory to chroot into</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@local ~]# groupdel --help</span><br><span class="line">Usage: groupdel [options] GROUP</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  -h, --help                    display this help message and exit</span><br><span class="line">  -R, --root CHROOT_DIR         directory to chroot into</span><br></pre></td></tr></table></figure>
+
+<h3 id="用户、分组管理"><a href="#用户、分组管理" class="headerlink" title="用户、分组管理"></a>用户、分组管理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 新增用户分组</span><br><span class="line">[root@local ~]# groupadd dev</span><br><span class="line"></span><br><span class="line"># 查看分组信息</span><br><span class="line"># 组名:口令:组id:组内用户列表</span><br><span class="line"># &quot;组名&quot;是用户组的名称，组名不能重复。</span><br><span class="line"># &quot;口令&quot;字段存放的是用户组加密后的口令字。一般Linux 系统的用户组都没有口令，即这个字段一般为空，或者是*，或者是X。</span><br><span class="line"># &quot;组id&quot;是一个整数，被系统内部用来标识组。</span><br><span class="line"># &quot;组内用户列表&quot;是属于这个组的所有用户的列表，不同用户之间用英文逗号(,)分隔。这个用户组可能是用户的主组，也可能是附加组。</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;group | grep dev</span><br><span class="line">dev:x:1000:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># 新增用户并设置密码</span><br><span class="line">[root@local ~]# useradd -g dev eks</span><br><span class="line">[root@local ~]# passwd eks</span><br><span class="line">Changing password for user eks.</span><br><span class="line">New password: </span><br><span class="line">BAD PASSWORD: The password is shorter than 7 characters</span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br><span class="line"></span><br><span class="line"># 查看用户信息</span><br><span class="line"># 用户名:口令:用户id:组id:注释性描述:主目录:登录Shell</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;passwd | grep eks</span><br><span class="line">eks:x:1000:1000::&#x2F;home&#x2F;eks:&#x2F;bin&#x2F;bash</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;group |grep eks</span><br><span class="line">dev:x:1000:eks</span><br><span class="line"></span><br><span class="line"># 配置root权限</span><br><span class="line"># 确认&#x2F;etc&#x2F;sudoers文件中的wheel分组的权限打开(没有用#注释掉)</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;sudoers</span><br><span class="line">## Allows people in group wheel to run all commands</span><br><span class="line">%wheel  ALL&#x3D;(ALL)       ALL</span><br><span class="line"></span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;group | grep wheel</span><br><span class="line">wheel:x:10:</span><br><span class="line"></span><br><span class="line"># 把用户添加wheel分组</span><br><span class="line">[root@local ~]# usermod -a -G wheel eks</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;group | grep eks</span><br><span class="line">wheel:x:10:eks</span><br><span class="line">dev:x:1000:eks</span><br><span class="line"></span><br><span class="line"># 禁止用户ssh登陆</span><br><span class="line">[root@local ~]# usermod -s &#x2F;sbin&#x2F;nologin eks</span><br><span class="line">[root@local ~]# cat &#x2F;etc&#x2F;passwd | grep eks</span><br><span class="line">eks:x:1000:1000::&#x2F;home&#x2F;eks:&#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/27/CollectionsFramework(2)--Collection/" rel="next" title="Collections Framework(2) -- Collection接口">
+                <i class="fa fa-chevron-left"></i> Collections Framework(2) -- Collection接口
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/07/nginx-Compile&Install/" rel="prev" title="CentOS编译安装nginx">
+                CentOS编译安装nginx <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/100.jpg"
+               alt="Eks OU" />
+          <p class="site-author-name" itemprop="name">Eks OU</p>
+          <p class="site-description motion-element" itemprop="description">2018关键字：坚持！！！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives/">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EksOU" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#指令"><span class="nav-number">1.</span> <span class="nav-text">指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户、分组管理"><span class="nav-number">2.</span> <span class="nav-text">用户、分组管理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eks OU</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

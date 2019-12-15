@@ -1,0 +1,1091 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Eks OU, java" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1. Outline">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Collections Framework(1) -- overview">
+<meta property="og:url" content="localhost&#x2F;2017&#x2F;04&#x2F;17&#x2F;CollectionsFramework(1)--overview&#x2F;index.html">
+<meta property="og:site_name" content="Eks OU">
+<meta property="og:description" content="1. Outline">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="&#x2F;images&#x2F;collections&#x2F;collection.png">
+<meta property="og:image" content="&#x2F;images&#x2F;collections&#x2F;map.png">
+<meta property="article:published_time" content="2017-04-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-15T08:59:07.527Z">
+<meta property="article:author" content="Eks OU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="&#x2F;images&#x2F;collections&#x2F;collection.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="localhost/2017/04/17/CollectionsFramework(1)--overview/"/>
+
+
+
+
+
+  <title> Collections Framework(1) -- overview | Eks OU </title>
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Eks OU</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="localhost/2017/04/17/CollectionsFramework(1)--overview/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Eks OU">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/100.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Eks OU">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Eks OU" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Collections Framework(1) -- overview
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-17T00:00:00+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JDK-Source-Code/" itemprop="url" rel="index">
+                    <span itemprop="name">JDK Source Code</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JDK-Source-Code/Collections-Framework/" itemprop="url" rel="index">
+                    <span itemprop="name">Collections Framework</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Outline"><a href="#1-Outline" class="headerlink" title="1. Outline"></a>1. Outline</h1><p><img src="/images/collections/collection.png" alt="collection"><br><img src="/images/collections/map.png" alt="map"></p>
+<a id="more"></a>
+
+<h2 id="1-1-Collection-interfaces"><a href="#1-1-Collection-interfaces" class="headerlink" title="1.1 Collection interfaces"></a>1.1 Collection interfaces</h2><ul>
+<li>Collection</li>
+<li>Set</li>
+<li>List</li>
+<li>Queue</li>
+<li>Deque</li>
+<li>Map</li>
+<li>SortedSet</li>
+<li>SortedMap</li>
+<li>NavigableSet</li>
+<li>NavigableMap</li>
+<li>BlockingQueue</li>
+<li>TransferQueue</li>
+<li>BlockingDeque</li>
+<li>ConcurrentMap</li>
+<li>ConcurrentNavigableMap</li>
+</ul>
+<h2 id="1-2-Infrastructure"><a href="#1-2-Infrastructure" class="headerlink" title="1.2 Infrastructure"></a>1.2 Infrastructure</h2><h3 id="1-2-1-Iterators"><a href="#1-2-1-Iterators" class="headerlink" title="1.2.1 Iterators"></a>1.2.1 Iterators</h3><ul>
+<li>Iterable</li>
+<li>Iterator</li>
+<li>ListIterator</li>
+</ul>
+<h3 id="1-2-2-Ordering"><a href="#1-2-2-Ordering" class="headerlink" title="1.2.2 Ordering"></a>1.2.2 Ordering</h3><ul>
+<li>Comparable</li>
+<li>Comparator</li>
+</ul>
+<h3 id="1-2-3-Runtime-exceptions"><a href="#1-2-3-Runtime-exceptions" class="headerlink" title="1.2.3 Runtime exceptions"></a>1.2.3 Runtime exceptions</h3><ul>
+<li>UnsupportedOperationException</li>
+<li>ConcurrentModificationException</li>
+</ul>
+<h3 id="1-2-4-Performance"><a href="#1-2-4-Performance" class="headerlink" title="1.2.4 Performance"></a>1.2.4 Performance</h3><ul>
+<li>RandomAccess</li>
+</ul>
+<h2 id="1-3-Abstract-implementations"><a href="#1-3-Abstract-implementations" class="headerlink" title="1.3 Abstract implementations"></a>1.3 Abstract implementations</h2><ul>
+<li>AbstractCollection</li>
+<li>AbstractSet</li>
+<li>AbstractLit</li>
+<li>AbstractSequentialList</li>
+<li>AbstractQueue</li>
+<li>AbstractMap</li>
+</ul>
+<h2 id="1-4-General-purpose-implementations"><a href="#1-4-General-purpose-implementations" class="headerlink" title="1.4 General-purpose implementations"></a>1.4 General-purpose implementations</h2><p>All general-purpose implementations are serializable and all  support a public clone method.</p>
+<ul>
+<li>HashSet</li>
+<li>TreeSet</li>
+<li>LinkedHashSet</li>
+<li>ArrayList</li>
+<li>ArrayDeque</li>
+<li>LinkedList</li>
+<li>PriorityQueue</li>
+<li>HashMap</li>
+<li>TreeMap</li>
+<li>LinkedHashMap</li>
+</ul>
+<h2 id="1-5-Special-purpose-implementations"><a href="#1-5-Special-purpose-implementations" class="headerlink" title="1.5 Special-purpose implementations"></a>1.5 Special-purpose implementations</h2><ul>
+<li>WeakHashMap</li>
+<li>IdentityHashMap</li>
+<li>CopyOnWriteArrayList</li>
+<li>CopyOnWriteArraySet</li>
+<li>EnumSet</li>
+<li>EnumMap</li>
+</ul>
+<h2 id="1-6-Concurrent-implementations"><a href="#1-6-Concurrent-implementations" class="headerlink" title="1.6 Concurrent implementations"></a>1.6 Concurrent implementations</h2><ul>
+<li>ConcurrentLinkedQueue</li>
+<li>LinkedBlockingQueue</li>
+<li>ArrayBlockingQueue</li>
+<li>PriorityBlockingQueue</li>
+<li>DelayQueue</li>
+<li>synchronousQueue</li>
+<li>LinkedBlockingDeque</li>
+<li>LinkedTransferQueue</li>
+<li>ConcurrentHashMap</li>
+<li>ConcurrentSkipListSet</li>
+<li>ConcurrentSkipListMap</li>
+</ul>
+<h2 id="1-7-Wrapper-implementations"><a href="#1-7-Wrapper-implementations" class="headerlink" title="1.7 Wrapper implementations"></a>1.7 Wrapper implementations</h2><h3 id="1-7-1-unmodifiable"><a href="#1-7-1-unmodifiable" class="headerlink" title="1.7.1 unmodifiable"></a>1.7.1 unmodifiable</h3><ul>
+<li>Collections.unmodifiableCollection</li>
+<li>Collections.unmodifiableList</li>
+<li>Collections.unmodifiableSet</li>
+<li>Collections.unmodifiableMap</li>
+<li>Collections.unmodifiableSortedSet</li>
+<li>Collections.unmodifiableSortedMap</li>
+<li>Collections.unmodifiableNavigableSet</li>
+<li>Collections.unmodifiableNavigableMap</li>
+</ul>
+<h3 id="1-7-2-synchronized"><a href="#1-7-2-synchronized" class="headerlink" title="1.7.2 synchronized"></a>1.7.2 synchronized</h3><ul>
+<li>Collections.synchronizedCollection</li>
+<li>Collections.synchronizedList</li>
+<li>Collections.synchronizedSet</li>
+<li>Collections.synchronizedMap</li>
+<li>Collections.synchronizedSortedSet</li>
+<li>Collections.synchronizedSortedMap</li>
+<li>Collections.synchronizedNavigableSet</li>
+<li>Collections.synchronizedNavigableMap</li>
+</ul>
+<h3 id="1-7-3-checked"><a href="#1-7-3-checked" class="headerlink" title="1.7.3 checked"></a>1.7.3 checked</h3><ul>
+<li>Collections.checkedCollection</li>
+<li>Collections.checkedLIst</li>
+<li>Collections.checkedSet</li>
+<li>Collections.checkedQueue</li>
+<li>Collections.checkedMap</li>
+<li>Collections.checkedSortedSet</li>
+<li>Collections.checkedSortedMap</li>
+<li>Collections.checkedNavigableSet</li>
+<li>Collections.checkedNavigableMap</li>
+</ul>
+<h2 id="1-8-Convenience-implementations"><a href="#1-8-Convenience-implementations" class="headerlink" title="1.8 Convenience implementations"></a>1.8 Convenience implementations</h2><ul>
+<li>Arrays.asList</li>
+<li>Collections.emptyEnumeration</li>
+<li>Collections.emptyIterator</li>
+<li>Collections.emptyListIterator</li>
+<li>Collections.emptyList</li>
+<li>Collections.emptyMap</li>
+<li>Collections.emptySet</li>
+<li>Collections.emptySortedSet</li>
+<li>Collections.emptySortedMap</li>
+<li>Collections.emptyNavigableSet</li>
+<li>Collections.emptyNavigableMap</li>
+<li>Collections.singleton</li>
+<li>Collections.singletonList</li>
+<li>Collections.singletonMap</li>
+<li>Collections.nCopys</li>
+</ul>
+<h2 id="1-9-Adapter-implementations"><a href="#1-9-Adapter-implementations" class="headerlink" title="1.9 Adapter implementations"></a>1.9 Adapter implementations</h2><ul>
+<li>Collections.newSetFromMap</li>
+<li>Collections.asLifoQueue</li>
+</ul>
+<h2 id="1-10-Legacy-implementations"><a href="#1-10-Legacy-implementations" class="headerlink" title="1.10 Legacy implementations"></a>1.10 Legacy implementations</h2><ul>
+<li>Vector</li>
+<li>HashTable</li>
+</ul>
+<h2 id="1-11-Algorithms"><a href="#1-11-Algorithms" class="headerlink" title="1.11 Algorithms"></a>1.11 Algorithms</h2><ul>
+<li>Collections.sort(List)</li>
+<li>Collections.binarySearch(List,Object)</li>
+<li>Collections.reverse(List)</li>
+<li>Collections.shuffle(List)</li>
+<li>Collections.fill(List,Object)</li>
+<li>Collections.copy(List dest,List Src)</li>
+<li>Collections.min(Collection)</li>
+<li>Collections.max(Collection)</li>
+<li>Collections.rotate(List list,List distance)</li>
+<li>Collections.replaceAll(List list,Object oldVal,Object newVal)</li>
+<li>Collections.indexOfSubList(List source,List target)</li>
+<li>Collections.lastIndexOfSubList(List source,List target)</li>
+<li>Collections.swap(List,int,int)</li>
+<li>Collections.frequency(Collection,Object)</li>
+<li>Collections.disjoint(Collection,Collection)</li>
+<li>Collections.addAll(Collection,T…)</li>
+</ul>
+<h2 id="1-12-Array-Utilities"><a href="#1-12-Array-Utilities" class="headerlink" title="1.12 Array Utilities"></a>1.12 Array Utilities</h2><ul>
+<li>Arrays</li>
+</ul>
+<h1 id="2-Category"><a href="#2-Category" class="headerlink" title="2. Category"></a>2. Category</h1><h2 id="2-1-Collection"><a href="#2-1-Collection" class="headerlink" title="2.1 Collection"></a>2.1 Collection</h2><ul>
+<li>Basic Operations<ul>
+<li>size()</li>
+<li>isEmpty()</li>
+<li>add(E e)</li>
+<li>remove(E e)</li>
+<li>removeIf(Predicate predicate)  —- default method since 1.8</li>
+<li>stream()  —- default method for Aggregate Operations since 1.8</li>
+<li>parallelStream()  —- default method for Aggregate Operations since 1.8</li>
+<li>iterator()  —- inherits from Iterable</li>
+<li>spliterator()  —- default method inherits from Iterable since 1.8</li>
+<li>forEach(Consumer consumer)  —- default method inherits from Iterable since 1.8</li>
+</ul>
+</li>
+<li>Bulk Operations<ul>
+<li>c1.containsAll(c2)</li>
+<li>c1.addAll(c2)</li>
+<li>c1.retainAll(c2)</li>
+<li>c1.removeAll(c2)</li>
+<li>clear()</li>
+</ul>
+</li>
+<li>Array Operations<ul>
+<li>toArray()</li>
+<li>toArray(T[] a)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-1-Set"><a href="#2-1-1-Set" class="headerlink" title="2.1.1 Set"></a>2.1.1 Set</h3><p>equals and hashCode methods are overrided through AbstractSet</p>
+<h4 id="2-1-1-1-Operations"><a href="#2-1-1-1-Operations" class="headerlink" title="2.1.1.1 Operations"></a>2.1.1.1 Operations</h4><p>all inherit from Collection</p>
+<h4 id="2-1-1-2-Implementations"><a href="#2-1-1-2-Implementations" class="headerlink" title="2.1.1.2 Implementations"></a>2.1.1.2 Implementations</h4><ul>
+<li>General-purpose<ul>
+<li>HashSet</li>
+<li>TreeSet</li>
+<li>LinkedHashSet</li>
+</ul>
+</li>
+<li>Special-purpose<ul>
+<li>EnumSet</li>
+<li>CopyOnWriteArraySet</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-2-List"><a href="#2-1-2-List" class="headerlink" title="2.1.2 List"></a>2.1.2 List</h3><p>equals and hashCode methods are overrided through AbstractList</p>
+<h4 id="2-1-2-1-Operations"><a href="#2-1-2-1-Operations" class="headerlink" title="2.1.2.1 Operations"></a>2.1.2.1 Operations</h4><ul>
+<li>Collection Operations<br>all inherit from Collection<ul>
+<li>sort(Comparator c)  —- default method since 1.8</li>
+<li>replaceAll(UnaryOperator operator)  —- default method since 1.8</li>
+</ul>
+</li>
+<li>Positional Access and Search Operations<ul>
+<li>get(int index)</li>
+<li>set(int index,E e)</li>
+<li>add(int index,E e)</li>
+<li>remove(int index)</li>
+<li>addAll(int index,Collection c)</li>
+<li>indexOf(Object o)</li>
+<li>lastIndexOf(Object o)</li>
+</ul>
+</li>
+<li>Iterators<ul>
+<li>listIterator()</li>
+<li>listIterator(int index)</li>
+</ul>
+</li>
+<li>Range-View Operation<ul>
+<li>subList(int fromIndex, int toIndex)</li>
+</ul>
+</li>
+<li>List Algorithms<ul>
+<li>Collections.sort(List)</li>
+<li>Collections.binarySearch(List,Object)</li>
+<li>Collections.reverse(List)</li>
+<li>Collections.shuffle(List)</li>
+<li>Collections.fill(List,Object)</li>
+<li>Collections.copy(List dest,List Src)</li>
+<li>Collections.rotate(List list,List distance)</li>
+<li>Collections.replaceAll(List list,Object oldVal,Object newVal)</li>
+<li>Collections.indexOfSubList(List source,List target)</li>
+<li>Collections.lastIndexOfSubList(List source,List target)</li>
+<li>Collections.swap(List,int,int)</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-1-2-2-Implementations"><a href="#2-1-2-2-Implementations" class="headerlink" title="2.1.2.2 Implementations"></a>2.1.2.2 Implementations</h4><ul>
+<li>General-purpose<ul>
+<li>ArrayList</li>
+<li>LinkedList</li>
+</ul>
+</li>
+<li>Special-purpose<ul>
+<li>CopyOnWriteArrayList</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-3-Queue"><a href="#2-1-3-Queue" class="headerlink" title="2.1.3 Queue"></a>2.1.3 Queue</h3><h4 id="2-1-3-1-Operations"><a href="#2-1-3-1-Operations" class="headerlink" title="2.1.3.1 Operations"></a>2.1.3.1 Operations</h4><table>
+<thead>
+<tr>
+<th>Type of Operation</th>
+<th>Throws exception</th>
+<th>Returns special value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Insert</td>
+<td>add(e)</td>
+<td>offer(e)</td>
+</tr>
+<tr>
+<td>Remove</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td>Examine</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+<tr>
+<td>#### 2.1.3.2 Implementations</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- General-purpose</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- PriorityQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- Concurrent</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- ConcurrentLinkedQueue  —- implements Queue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- LinkedBlockingQueue  —– implements BlockingQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- ArrayBlockingQueue  —- implements BlockingQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- PriorityBlockingQueue  —- implements BlockingQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- DelayQueue  —- implements BlockingQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- SynchronousQueue  —- implements BlockingQueue</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- LinkedTransferQueue  —- implements TransferQueue</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="2-1-4-Deque"><a href="#2-1-4-Deque" class="headerlink" title="2.1.4 Deque"></a>2.1.4 Deque</h3><h4 id="2-1-4-1-Operations"><a href="#2-1-4-1-Operations" class="headerlink" title="2.1.4.1 Operations"></a>2.1.4.1 Operations</h4><ul>
+<li>Main Methods<ul>
+<li>addFirst(e);offerFirst(e)</li>
+<li>addLast(e);offerLast(e)</li>
+<li>removeFirst();pollFirst()</li>
+<li>removeLast();pollLast()</li>
+<li>getFirst();peekFirst()</li>
+<li>getLast();peekLast()</li>
+<li>removeFirstOccurrence(o);removeLastOccurrence(o)</li>
+</ul>
+</li>
+<li>Queue Methods<ul>
+<li>add(e)  —- equivalent to addLast(e)</li>
+<li>offer(e)  —- equivalent to offerLast(e)</li>
+<li>remove()  —- equivalent to removeFirst()</li>
+<li>poll()  —- equivalent to pollFirst()</li>
+<li>element()  —- equivalent to getFirst()</li>
+<li>peek()  —- equivalent to peekFirst()</li>
+</ul>
+</li>
+<li>stack Methods<ul>
+<li>push(e)  —- equivalent to addFirst(e)</li>
+<li>pop()  —- equivalent to removeFirst()</li>
+</ul>
+</li>
+<li>Collection Methods<ul>
+<li>remove(o)  —- equivalent to removeFirstOccurrence(o)</li>
+<li>contains(o)</li>
+<li>size()</li>
+<li>iterator()</li>
+<li>descendingIterator()</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-1-4-2-Implementations"><a href="#2-1-4-2-Implementations" class="headerlink" title="2.1.4.2 Implementations"></a>2.1.4.2 Implementations</h4><ul>
+<li>General-purpose<ul>
+<li>LinkedList</li>
+<li>ArrayDeque</li>
+</ul>
+</li>
+<li>Concurrent<ul>
+<li>LinkedBlockingDeque  —- implements BlockingDeque</li>
+<li>ConcurrentLinkedDeque</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-Map"><a href="#2-2-Map" class="headerlink" title="2.2 Map"></a>2.2 Map</h2><h3 id="2-2-1-Operations"><a href="#2-2-1-Operations" class="headerlink" title="2.2.1 Operations"></a>2.2.1 Operations</h3><ul>
+<li><p>Basic Operations</p>
+<ul>
+<li>size()</li>
+<li>isEmpty()</li>
+<li>containsKey(key)</li>
+<li>containsValue(value)</li>
+<li>get(key)</li>
+<li>put(key,value)</li>
+<li>remove(key)</li>
+<li>getOrDefault(key, defaultValue)  —- default method since 1.8</li>
+<li>forEach(action)  —- default method since 1.8</li>
+<li>replaceAll(function)  —- default method since 1.8</li>
+<li>putIfAbsent(key,value)  —- default method since 1.8</li>
+<li>remove(key, value)  —- default method since 1.8</li>
+<li>replace(key, oldValue, newValue)  —- default method since 1.8</li>
+<li>replace(key, value)  —- default method since 1.8</li>
+<li>computeIfAbsent(key,mappingFunction)  —- default method since 1.8</li>
+<li>computeIfPresent(key,remappingFunction)  —- default method since 1.8</li>
+<li>compute(key,remappingFunction)  —- default method since 1.8</li>
+<li>merge(key, value,remappingFunction)  —- default method since 1.8</li>
+</ul>
+</li>
+<li><p>Bulk Operations</p>
+<ul>
+<li>putAll(map)</li>
+<li>clear()</li>
+</ul>
+</li>
+<li><p>Collection Views</p>
+<ul>
+<li>keySet()</li>
+<li>values()</li>
+<li>entrySet()</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-2-Implementations"><a href="#2-2-2-Implementations" class="headerlink" title="2.2.2 Implementations"></a>2.2.2 Implementations</h3><ul>
+<li>General-Purpose<ul>
+<li>HashMap</li>
+<li>TreeMap  —- implements NavigableMap</li>
+<li>LinkedHashMap</li>
+</ul>
+</li>
+<li>Special-Purpose<ul>
+<li>EnumMap</li>
+<li>WeakHashMap</li>
+<li>IdentityHashMap</li>
+</ul>
+</li>
+<li>Concurrent<ul>
+<li>ConcurrentHashMap</li>
+<li>ConcurrentSkipListMap  —- implements ConcurrentNavigableMap</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/20/linux-bulidSvnServer/" rel="next" title="CentOS搭建SVN服务器">
+                <i class="fa fa-chevron-left"></i> CentOS搭建SVN服务器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/27/CollectionsFramework(2)--Collection/" rel="prev" title="Collections Framework(2) -- Collection接口">
+                Collections Framework(2) -- Collection接口 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/100.jpg"
+               alt="Eks OU" />
+          <p class="site-author-name" itemprop="name">Eks OU</p>
+          <p class="site-description motion-element" itemprop="description">2018关键字：坚持！！！</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives/">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EksOU" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Outline"><span class="nav-number">1.</span> <span class="nav-text">1. Outline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Collection-interfaces"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Collection interfaces</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Infrastructure"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Infrastructure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-Iterators"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 Iterators</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-Ordering"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 Ordering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-Runtime-exceptions"><span class="nav-number">1.2.3.</span> <span class="nav-text">1.2.3 Runtime exceptions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-4-Performance"><span class="nav-number">1.2.4.</span> <span class="nav-text">1.2.4 Performance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Abstract-implementations"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Abstract implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-General-purpose-implementations"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 General-purpose implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Special-purpose-implementations"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 Special-purpose implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-Concurrent-implementations"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 Concurrent implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-Wrapper-implementations"><span class="nav-number">1.7.</span> <span class="nav-text">1.7 Wrapper implementations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-1-unmodifiable"><span class="nav-number">1.7.1.</span> <span class="nav-text">1.7.1 unmodifiable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-2-synchronized"><span class="nav-number">1.7.2.</span> <span class="nav-text">1.7.2 synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-3-checked"><span class="nav-number">1.7.3.</span> <span class="nav-text">1.7.3 checked</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8-Convenience-implementations"><span class="nav-number">1.8.</span> <span class="nav-text">1.8 Convenience implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-9-Adapter-implementations"><span class="nav-number">1.9.</span> <span class="nav-text">1.9 Adapter implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-10-Legacy-implementations"><span class="nav-number">1.10.</span> <span class="nav-text">1.10 Legacy implementations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-11-Algorithms"><span class="nav-number">1.11.</span> <span class="nav-text">1.11 Algorithms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-12-Array-Utilities"><span class="nav-number">1.12.</span> <span class="nav-text">1.12 Array Utilities</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Category"><span class="nav-number">2.</span> <span class="nav-text">2. Category</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Collection"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-Set"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.1 Set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-1-Operations"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">2.1.1.1 Operations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-2-Implementations"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">2.1.1.2 Implementations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-List"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.1.2 List</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-1-Operations"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">2.1.2.1 Operations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-2-Implementations"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">2.1.2.2 Implementations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-Queue"><span class="nav-number">2.1.3.</span> <span class="nav-text">2.1.3 Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-1-Operations"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">2.1.3.1 Operations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-Deque"><span class="nav-number">2.1.4.</span> <span class="nav-text">2.1.4 Deque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-4-1-Operations"><span class="nav-number">2.1.4.1.</span> <span class="nav-text">2.1.4.1 Operations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-4-2-Implementations"><span class="nav-number">2.1.4.2.</span> <span class="nav-text">2.1.4.2 Implementations</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Map"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-Operations"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 Operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-Implementations"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 Implementations</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Eks OU</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
