@@ -4,10 +4,10 @@ comments: false
 ---
 
 # About me
-职业：野生程序猿
+职业：码农
 语言：java
-坐标：广东佛山
-公司：[广东掌讯信息科技有限公司](http://www.yct360.cn)
+坐标：上海
+公司：无熵信息科技有限公司
 邮箱：eks999@dingtalk.com
 
 # The best wishes
