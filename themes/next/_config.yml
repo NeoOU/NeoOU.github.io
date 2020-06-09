@@ -6,7 +6,7 @@
 favicon: /favicon.ico
 
 # Set default keywords (Use a comma to separate)
-keywords: "Eks OU, java"
+keywords: "Neo OU, java"
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
@@ -129,7 +129,7 @@ font:
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
   #LinkLabel: Link
-  GitHub: https://github.com/EksOU
+  GitHub: https://github.com/NeoOU
   #Weibo: http://weibo.com/oomeD
 
 

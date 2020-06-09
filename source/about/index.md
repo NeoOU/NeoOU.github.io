@@ -8,7 +8,7 @@ comments: false
 语言：java
 坐标：上海
 公司：无熵信息科技有限公司
-邮箱：eks999@dingtalk.com
+邮箱：neo666.ou@gmail.com
 
 # The best wishes
 用博客，记录与见证成长！
